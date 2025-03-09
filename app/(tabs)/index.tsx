@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SignUp from '../signup/signup';
+import Splash from '../splash/splash';
+
 
 export default function HomeScreen() {
   return (
     
         <SafeAreaView>
-          <SignUp />
+          <Splash />
         </SafeAreaView>
     
   );

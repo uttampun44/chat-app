@@ -3,8 +3,29 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
+      "@/pages/*": [
+        "./pages/*"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/assets/*": [
+        "./assets/*"
+      ],
+      "@/hooks/*": [
+        "./hooks/*"
+      ],
+      "@/utils/*": [
+        "./utils/*"
+      ],
+      "@/screens/*": [
+        "./screens/*"
+      ],
+      "@/store/*": [
+        "./store/*"
+      ],
+      "@/constants/*":[
+         "./constants/*"
       ]
     }
   },
