@@ -1,31 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import SignUp from '../signup/signup';
 
 export default function HomeScreen() {
   return (
     
-        <SafeAreaView style={styles.titleContainer}>
-           <Text>Hello</Text>
+        <SafeAreaView>
+          <SignUp />
         </SafeAreaView>
     
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
