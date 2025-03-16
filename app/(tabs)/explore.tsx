@@ -11,7 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function TabTwoScreen() {
   return (
     <SafeAreaView>
-      <Text>expolore</Text>
+      <Text style={styles.text}>expolore</Text>
     </SafeAreaView>
   );
 }
@@ -27,4 +27,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+  text: {
+    textAlign: "center"
+  }
 });
