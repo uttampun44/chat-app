@@ -1,34 +1,19 @@
 import { Stack, useRouter } from "expo-router";
 import React from "react";
-import { Button, FlatList, Image, Text, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { socialIcon } from "@/utils/onboarding";
 
 export default function OnBoarding() {
 
     const router = useRouter();
-    const socialIcon = [
-        {
-            id: 1,
-            source: require('../../../assets/images/Facebook_logo.png')
-        },
-        {
-            id: 2,
-            source: require('../../../assets/images/google.png')
-        },
-        {
-            id: 3,
-            source: require('../../../assets/images/apple.png')
-        },
 
-
-    ]
 
     const handleButton = () => {
-         console.log("clicked")
+        router.push("/pages/signin/signin")
     }
 
     const handleRouter = () => {
-        console.log("clicked")
         router.push("/pages/login/login")
     }
     return (
@@ -37,8 +22,8 @@ export default function OnBoarding() {
             <View className=" pt-4 pb-10 flex items-center">
                 <Image source={require("../../../assets/images/onboarding_title.png")} />
             </View>
-            <Text className="text-7xl text-white font-semibold text-center">Connect friends</Text>
-            <Text className="text-7xl text-white font-bold text-center">easily & quickly</Text>
+            <Text className="text-7xl text-white font-normal text-center">Connect friends</Text>
+            <Text className="text-8xl text-white font-bold text-center">easily & quickly</Text>
             <View className="mt-4 mb-10 px-5">
                 <Text className="text-primary text-center text-base font-normal">Our chat app is the perfect way to stay connected with friends and family.</Text>
             </View>
@@ -48,15 +33,19 @@ export default function OnBoarding() {
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => <Image source={item.source} className="cursor-pointer" />}
                     className="social-icons *:flex-row"
+                    numColumns={3}
                 />
             </View>
-            <Text className="text-primary text-center text-base font-normal">Or</Text>
+            <Text className="text-primary text-center text-base font-normal my-7">Or</Text>
 
-            <View className="my-7 mx-6">
-                <Button onPress={handleButton} title="Sign up withn mail " />
-            </View>
-            <View className="flex items-center justify-center flex-row">
-            <Text className="text-primary text-base font-medium">Existing Account ?</Text> <Text className="text-white font-bold text-base" onPress={handleRouter}> Log in</Text>
+            <TouchableOpacity
+                onPress={handleButton}
+                className="bg-white py-3 rounded-lg mx-6"
+            >
+                <Text className="text-black text-center font-bold">Sign up with mail</Text>
+            </TouchableOpacity>
+            <View className="flex items-center justify-center flex-row my-10">
+                <Text className="text-primary text-base font-medium">Existing Account ?</Text> <Text className="text-white font-bold text-base" onPress={handleRouter}> Log in</Text>
             </View>
         </SafeAreaView>
     )

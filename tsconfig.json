@@ -4,10 +4,10 @@
     "strict": true,
     "paths": {
       "@/pages/*": [
-        "./pages/*"
+        "./app/pages/*"
       ],
       "@/components/*": [
-        "./components/*"
+        "./app/components/*"
       ],
       "@/assets/*": [
         "./assets/*"
@@ -16,7 +16,7 @@
         "./hooks/*"
       ],
       "@/utils/*": [
-        "./utils/*"
+        "./app/utils/*"
       ],
       "@/screens/*": [
         "./screens/*"

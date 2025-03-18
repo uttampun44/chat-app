@@ -1,5 +1,4 @@
-import { Text, View } from "react-native";
-import Splash from "./pages/splash/splash";
+import Splash from "@/pages/splash/splash";
 import './global.css'
 
 
