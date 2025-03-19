@@ -26,6 +26,9 @@
       ],
       "@/constants/*": [
         "./constants/*"
+      ],
+      "@/types/*": [
+        "./app/types/*"
       ]
     }
   },
