@@ -10,15 +10,21 @@ export default function OnBoarding() {
 
 
     const handleButton = () => {
-        router.push("/pages/signin/signin")
+        router.push("/pages/signup/signup")
     }
 
     const handleRouter = () => {
         router.push("/pages/login/login")
     }
+
+    let index = 3
+    const icons = socialIcon.filter(function (item) {
+        return item !== socialIcon[index]
+    })
+
     return (
         <SafeAreaView className="bg-[#1A1A1A] h-screen">
-            <Stack.Screen options={{ headerShown: false }} />
+            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
             <View className=" pt-4 pb-10 flex items-center">
                 <Image source={require("../../../assets/images/onboarding_title.png")} />
             </View>
@@ -29,9 +35,9 @@ export default function OnBoarding() {
             </View>
             <View className="flex justify-center items-center socialicons-row">
                 <FlatList
-                    data={socialIcon}
+                    data={icons}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <Image source={item.source} className="cursor-pointer" />}
+                    renderItem={({ item }) => <Image source={item.source} />}
                     className="social-icons *:flex-row"
                     numColumns={3}
                 />
@@ -45,7 +51,9 @@ export default function OnBoarding() {
                 <Text className="text-black text-center font-bold">Sign up with mail</Text>
             </TouchableOpacity>
             <View className="flex items-center justify-center flex-row my-10">
-                <Text className="text-primary text-base font-medium">Existing Account ?</Text> <Text className="text-white font-bold text-base" onPress={handleRouter}> Log in</Text>
+                <Text className="text-primary text-base font-medium">Existing Account ?</Text> <TouchableOpacity onPress={handleRouter}>
+                    <Text className="text-white font-bold text-base ml-1">Log in</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )

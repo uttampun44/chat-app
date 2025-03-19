@@ -1,6 +1,6 @@
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, View } from "react-native";
+import {Image, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
@@ -25,7 +25,7 @@ export default function Splash() {
     }, [])
     return (
         <SafeAreaView>
-          <Stack.Screen options={{ headerShown: false }} />
+          <Stack.Screen name="splash" options={{ headerShown: false }} />
                <View className="h-screen flex items-center justify-center">
 
                 {
