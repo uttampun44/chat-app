@@ -29,20 +29,20 @@ export default function Signup() {
       <SafeAreaView>
          <Stack.Screen name="signup" options={{ headerShown: false }} />
          <TouchableOpacity onPress={handleBack}>
-            <View className="mt-3 mb-16 ml-6">
+            <View className="mt-3 mb-4 ml-6">
                <Image source={require("../../../assets/images/Back.png")} />
             </View>
          </TouchableOpacity>
          <Text className="text-2xl font-bold text-center mt-4 mb-7">Log in to Chatbox</Text>
          <Text className="text-primary text-xl font-normal text-center">Welcome back! Sign in using your social {"\n"} account or email to continue us</Text>
 
-         <View className="px-6">
+         <View className="px-6 mt-2">
             <Text className="text-secondary text-sm font-medium">Your Name</Text>
             <Controller
                control={control}
                render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                     className="w-full border-b-[1px] border-primary outline-none mb-7 mt-2.5 text-base font-medium"
+                     className="w-full border-b-[1px] border-primary outline-none mb-4 mt-2.5 text-base font-medium"
                      onChange={onChange}
                      value={value}
                      onBlur={onBlur}
@@ -61,7 +61,7 @@ export default function Signup() {
                control={control}
                render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                     className="w-full border-b-[1px] border-primary outline-none mb-7 mt-2.5 text-base font-medium"
+                     className="w-full border-b-[1px] border-primary outline-none mb-4 mt-2.5 text-base font-medium"
                      onChange={onChange}
                      value={value}
                      onBlur={onBlur}
@@ -81,10 +81,29 @@ export default function Signup() {
                control={control}
                render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                     className="w-full border-b-[1px] border-primary outline-none mb-7 mt-2.5 text-base font-medium"
+                     className="w-full border-b-[1px] border-primary outline-none mb-4 mt-2.5 text-base font-medium"
                      onChange={onChange}
                      value={value}
                      onBlur={onBlur}
+                  />
+               )}
+               name="confirmPassword"
+               rules={{
+                  required: true,
+                  minLength: 6,
+               }}
+            />
+            {
+               errors.confirmPassword && <Text className="text-danger text-sm">Please Enter your password</Text>
+            }
+            <Text className="text-secondary text-sm font-medium mt-2.5">Confirm Password</Text>
+            <Controller
+               control={control}
+               render={({ field: { value, onChange } }) => (
+                  <TextInput
+                     className="w-full border-b-[1px] border-primary outline-none mt-2.5"
+                     value={value}
+                     onChange={onChange}
                   />
                )}
                name="password"
@@ -96,9 +115,7 @@ export default function Signup() {
             {
                errors.password && <Text className="text-danger text-sm">Please Enter your password</Text>
             }
-            <Text className="text-secondary text-sm font-medium mt-2.5">Confirm Password</Text>
-            <TextInput className="w-full border-b-[1px] border-primary outline-none mt-2.5" />
-            <TouchableOpacity className="bg-secondary rounded-md mt-32 mb-6 py-4 px-20" onPress={handleSubmit(onSubmit)}>
+            <TouchableOpacity className="bg-secondary rounded-md mt-8 mb-6 py-4 px-20" onPress={handleSubmit(onSubmit)}>
                <Text className="text-white text-center font-medium">Create an account</Text>
             </TouchableOpacity>
          </View>

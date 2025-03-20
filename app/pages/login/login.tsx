@@ -1,7 +1,10 @@
 import { socialIcon } from "@/utils/onboarding";
 import { Stack, useRouter } from "expo-router";
+import { Controller } from "react-hook-form";
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useForm } from "react-hook-form";
+import loginForm from "@/types/login";
 
 export default function login() {
 
@@ -11,13 +14,21 @@ export default function login() {
         return item !== socialIcon[index]
     })
 
+    const { control, formState: { errors }, handleSubmit } = useForm<loginForm>({
+
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
+
     const router = useRouter();
 
     const handleBack = () => {
         router.push("/pages/onboarding/onboarding")
     }
 
-    const handleSubmit = () => {
+    const onSubmit = (data: loginForm) => {
 
     }
 
@@ -39,7 +50,7 @@ export default function login() {
                 <FlatList
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <Image source={item.source}  />}
+                    renderItem={({ item }) => <Image source={item.source} />}
                     className="social-icons *:flex-row"
                     numColumns={3}
                 />
@@ -48,13 +59,42 @@ export default function login() {
 
             <View className="px-6">
                 <Text className="text-secondary text-sm font-medium">Your Email</Text>
-                <TextInput className="w-full border-b-[1px] border-primary outline-none mb-7 mt-2.5" />
-                <Text className="text-secondary text-sm font-medium">Password</Text>
-                <TextInput className="w-full border-b-[1px] border-primary outline-none mt-2.5" />
+                <Controller
+                    control={control}
+                    name="email"
+                    render={({ field: { onChange, value } }) => (
+                        <TextInput
+
+                            onChangeText={onChange}
+
+                            value={value}
+                            placeholder="Enter your email"
+                            className="w-full border-b-[1px] border-primary outline-none mt-2.5"
+                        />
+                    )}
+                    rules={{ required: true }}
+                />
+                {errors.email && <Text className="text-danger text-sm mt-1">Please enter a email</Text>}
+                <Text className="text-secondary text-sm font-medium mt-4">Password</Text>
+                <Controller
+                    control={control}
+                    name="password"
+                    render={({ field: { onChange, value } }) => (
+                        <TextInput
+                            onChangeText={onChange}
+                            value={value}
+                            placeholder="Enter your password"
+                            className="w-full border-b-[1px] border-primary outline-none mt-2.5"
+                            secureTextEntry={true}
+                        />
+                    )}
+                    rules={{ required: true }}                    
+                />
+                {errors.password && <Text className="text-danger text-sm mt-1">Please enter a password</Text>}
             </View>
             <TouchableOpacity
-                onPress={handleSubmit}
-                className="bg-white py-3 rounded-lg mx-6 mt-40"
+                onPress={handleSubmit(onSubmit)}
+                className="bg-white py-3 rounded-lg mx-6 mt-32"
             >
                 <Text className="text-primary text-center font-medium">Login</Text>
             </TouchableOpacity>
