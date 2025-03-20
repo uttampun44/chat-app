@@ -76,7 +76,6 @@ export default function Signup() {
             {
                errors.email && <Text className="text-danger text-sm">Please Enter your email</Text>
             }
-            />
             <Text className="text-secondary text-sm font-medium">Password</Text>
             <Controller
                control={control}
