@@ -37,7 +37,7 @@ export default function OnBoarding() {
                 <FlatList
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <Image source={item.source} />}
+                    renderItem={({ item }) => <View><Image source={item.source} /></View>}
                     className="social-icons *:flex-row"
                     numColumns={3}
                 />
@@ -51,7 +51,8 @@ export default function OnBoarding() {
                 <Text className="text-black text-center font-bold">Sign up with mail</Text>
             </TouchableOpacity>
             <View className="flex items-center justify-center flex-row my-10">
-                <Text className="text-primary text-base font-medium">Existing Account ?</Text> <TouchableOpacity onPress={handleRouter}>
+                <Text className="text-primary text-base font-medium">Existing Account ?</Text> 
+                <TouchableOpacity onPress={handleRouter}>
                     <Text className="text-white font-bold text-base ml-1">Log in</Text>
                 </TouchableOpacity>
             </View>

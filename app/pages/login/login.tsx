@@ -50,7 +50,7 @@ export default function login() {
                 <FlatList
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <Image source={item.source} />}
+                    renderItem={({ item }) => <View><Image source={item.source} /></View>}
                     className="social-icons *:flex-row"
                     numColumns={3}
                 />
@@ -94,7 +94,7 @@ export default function login() {
             </View>
             <TouchableOpacity
                 onPress={handleSubmit(onSubmit)}
-                className="bg-white py-3 rounded-lg mx-6 mt-32"
+                className="bg-white py-3 rounded-lg mx-6 mt-16"
             >
                 <Text className="text-primary text-center font-medium">Login</Text>
             </TouchableOpacity>
