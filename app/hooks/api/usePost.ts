@@ -1,16 +1,21 @@
-import axiosInstance from "@/lib/axiosGet";
-import { useEffect, useState } from "react";
+import axiosInstance from "@/lib/axiosInstance";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-export default function usePost(url: string, data: any){
-    const [postData, setData] = useState<any>(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
+export default function usePost<T = any>(url: string) {
+    
+    const mutation = useMutation<T, unknown, any>({
+        mutationFn: async(data) => {
             const response = await axiosInstance.post(url, data);
-            setData(response.data);
-        };
-        fetchData();
-    }, [url, data, postData]);
+            return response.data;
+        },
+        onSuccess: (data) => {
+            toast.success("Data posted successfully");
+        },
+        onError: (error) => {
+            toast.error("Something went wrong");
+        },
+    })
 
-    return { data, postData};
+  return mutation;
 }

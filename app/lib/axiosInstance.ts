@@ -1,7 +1,7 @@
 import Axios from "axios"
 
 const axiosInstance = Axios.create({
-  baseUrl : "https://chatbox-api.herokuapp.com/api/v1",
+  baseURL : "https://chatbox-api.herokuapp.com/api/v1",
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
