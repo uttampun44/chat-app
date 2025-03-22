@@ -2,12 +2,11 @@ import { Stack, useRouter } from "expo-router";
 import React from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { socialIcon } from "@/utils/onboarding";
+import  socialIcon  from "@/utils/onboarding";
 
 export default function OnBoarding() {
 
     const router = useRouter();
-
 
     const handleButton = () => {
         router.push("/pages/signup/signup")

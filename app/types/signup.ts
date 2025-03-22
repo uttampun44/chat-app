@@ -1,4 +1,4 @@
-export default interface SignupFormTypes  {
+export interface signUpFormTypes  {
     username: string,
     email: string,
     password: string,

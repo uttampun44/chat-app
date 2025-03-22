@@ -12,7 +12,7 @@ export default function useFetch<T = any>(url: string, token?:string) {
     };
 
     const { isPending, isSuccess, isError, data } = useQuery<T>({
-        queryKey: ["fetchData"],
+        queryKey: ["fetchData", url, token],
         queryFn: fetchData,
     })
 

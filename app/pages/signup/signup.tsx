@@ -2,7 +2,7 @@ import { Stack, useRouter } from "expo-router";
 import { Button, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Controller, useForm } from "react-hook-form"
-import signUpFormTypes from "@/types/signup";
+import {signUpFormTypes} from "@/types/signup";
 
 export default function Signup() {
 

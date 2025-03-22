@@ -1,10 +1,10 @@
-import { socialIcon } from "@/utils/onboarding";
+import socialIcon from "@/utils/onboarding";
 import { Stack, useRouter } from "expo-router";
 import { Controller } from "react-hook-form";
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm } from "react-hook-form";
-import loginForm from "@/types/login";
+import {loginForm} from "@/types/login";
 
 export default function login() {
 

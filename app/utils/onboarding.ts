@@ -1,4 +1,4 @@
-export const socialIcon = [
+const socialIcon = [
 
     {
         id: 1,
@@ -17,3 +17,5 @@ export const socialIcon = [
         source: require("../../assets/images/apple_black.png")
     }
 ]
+
+export default socialIcon;
