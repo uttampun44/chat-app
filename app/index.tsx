@@ -1,4 +1,4 @@
-import Splash from "@/pages/splash/splash";
+import Splash from "./screens/splash/splash";
 import './global.css'
 
 

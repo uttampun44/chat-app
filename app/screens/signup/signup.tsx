@@ -18,11 +18,11 @@ export default function Signup() {
    })
 
    const handleBack = () => {
-      router.push("/pages/onboarding/onboarding")
+      router.push("/screens/onboarding/onboarding")
    }
 
    const onSubmit = (data: signUpFormTypes) => {
-      router.push("/pages/login/login")
+      router.push("/screens/login/login")
    }
 
    return (

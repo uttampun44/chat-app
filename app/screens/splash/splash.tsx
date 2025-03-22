@@ -15,7 +15,7 @@ export default function Splash() {
         }, 1000);
 
         const load = setTimeout(() => {
-            router.push("/pages/onboarding/onboarding");
+            router.push("/screens/onboarding/onboarding");
 
         }, 2000);
         return () => {

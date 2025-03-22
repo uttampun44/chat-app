@@ -25,11 +25,11 @@ export default function login() {
     const router = useRouter();
 
     const handleBack = () => {
-        router.push("/pages/onboarding/onboarding")
+        router.push("/screens/onboarding/onboarding")
     }
 
     const onSubmit = (data: loginForm) => {
-
+       router.push("/tabs/home")
     }
 
     const handleForgetPassword = () => {

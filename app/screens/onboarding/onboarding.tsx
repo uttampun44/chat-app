@@ -9,11 +9,11 @@ export default function OnBoarding() {
     const router = useRouter();
 
     const handleButton = () => {
-        router.push("/pages/signup/signup")
+        router.push("/screens/signup/signup")
     }
 
     const handleRouter = () => {
-        router.push("/pages/login/login")
+        router.push("/screens/login/login")
     }
 
     let index = 3

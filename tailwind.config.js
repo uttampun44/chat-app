@@ -12,6 +12,7 @@ module.exports = {
       success: "#00FF00",
       warning: "#FFFF00",
       info: "#00FFFF",
+      homebg: "#000E08"
     }
   },
   plugins: [],
