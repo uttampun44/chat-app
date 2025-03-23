@@ -1,0 +1,6 @@
+name: chatapp
+
+on:
+ push:
+  branches:
+   - main
