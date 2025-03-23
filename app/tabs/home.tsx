@@ -40,17 +40,16 @@ export default function Home() {
             </View>
 
             <Text className="text-white text-xl font-medium ml-6">Friends</Text>
-            <View className="flex flex-row justify-between items-center my-10 mx-6">
+            <View className="my-10 mx-6">
                 <FlatList
                     data={friends}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <View>
+                    renderItem={({ item }) => <View className="flex flex-col items-center">
                         <Image source={item.image} />
                         <Text className="text-white text-xl font-medium ml-2">{item.name}</Text>
                     </View>}
                     numColumns={4}
-                    className="friends-row *:gap-x-4"
-
+                    columnWrapperStyle={{ columnGap: 16, justifyContent: "space-between", alignItems: "center" }}
                 />
 
             </View>
