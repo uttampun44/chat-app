@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import Message from "./Message"
 import Calls from "./Calls"
 import Contact from "./contact"
 import Settings from "./settings"
 import Home from "./home"
+import Message from "./message"
 
 export default function TabLayout() {
     const Tabs = createBottomTabNavigator()
