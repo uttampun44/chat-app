@@ -1,4 +1,4 @@
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -10,37 +10,46 @@ export default function Home() {
         {
             id: 1,
             name: "Adil",
-            image: require("../../assets/images/friendOne.png")
+            image: require("../../assets/images/friendOne.png"),
+            message: "Hi ! there"
         },
         {
             id: 2,
             name: "Marina",
-            image: require("../../assets/images/friendTwo.png")
+            image: require("../../assets/images/friendTwo.png"),
+            message: "Hi ! there"
         },
         {
             id: 3,
             name: "Dean",
-            image: require("../../assets/images/friendThree.png")
+            image: require("../../assets/images/friendThree.png"),
+            message: "Hi ! there"
         },
         {
             id: 4,
             name: "John Doe",
-            image: require("../../assets/images/friendFour.png")
+            image: require("../../assets/images/friendFour.png"),
+            message: "Hi ! there"
 
         }
     ]
 
+    const handleUserClick = (id: number) => {
+        console.log(id)
+    }
     return (
         <SafeAreaView className="bg-homebg h-screen">
-         
-            <View className="my-10 mx-6 flex flex-row justify-between items-center">
-                <Image source={require("../../assets/images/Search.png")} />
-                <Text className="text-white text-xl font-medium text-center">Home</Text>
-                <Image source={require("../../assets/images/profile.png")} />
+
+            <View className="mt-10 mb-5 mx-6 flex flex-row  items-center">
+                <View className="flex flex-row items-center flex-1 gap-x-1 relative">
+
+                    <TextInput className="text-black text-base font-normal outline-none border-[1px] bg-[#F3F6F6] p-1 border-[#F3F6F6] rounded-md w-full" placeholder="Search Friends..." />
+                </View>
+                <Image source={require("../../assets/images/profile.png")} className="ml-4 w-9 h-9" />
             </View>
 
             <Text className="text-white text-xl font-medium ml-6">Friends</Text>
-            <View className="my-10 mx-6">
+            <View className="my-5 mx-6">
                 <FlatList
                     data={friends}
                     keyExtractor={(item) => item.id.toString()}
@@ -52,6 +61,27 @@ export default function Home() {
                     columnWrapperStyle={{ columnGap: 16, justifyContent: "space-between", alignItems: "center" }}
                 />
 
+            </View>
+
+            <View className="chat-details bg-primary rounded-t-2xl h-screen p-2.5" >
+                <FlatList
+                    data={friends.reverse()}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => <TouchableOpacity 
+                    className="flex flex-row gap-x-4 items-center my-2.5 border-b-[1px] pb-4 border-white"
+                    onPress={() => handleUserClick(item.id)}
+                    >
+                        <View>
+                            <Image source={item.image} />
+
+                        </View>
+                        <View className="flex-1">
+                            <Text className="text-black text-xl font-semibold ml-2">{item.name}</Text>
+                            <Text className="text-white text-base font-normal ml-2">{item.message}</Text></View>
+                    </TouchableOpacity>}
+                    numColumns={1}
+
+                />
             </View>
         </SafeAreaView>
     )

@@ -10,19 +10,36 @@ export default function TabLayout() {
     const Tabs = createBottomTabNavigator()
     return (
         <Tabs.Navigator >
-            <Tabs.Screen name="Home" component={Home} options={{ headerShown: false,
+            <Tabs.Screen name="Message" component={Home} options={{ headerShown: false,
                 tabBarIcon: ({ color, size }) => {
                     return (
                         <View>
-                             <Image source={require("../../assets/images/Users.png")}  />
+                             <Image source={require("../../assets/images/message.png")}  />
                         </View>
                     )
-                }
+                },
+                tabBarActiveTintColor: "#24786D",
             }} />
-            <Tabs.Screen name="Message" component={Message} options={{ headerShown: false }} />
-            <Tabs.Screen name="Calls" component={Calls} options={{ headerShown: false }} />
-            <Tabs.Screen name="Contact" component={Contact} options={{ headerShown: false }} />
-            <Tabs.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+            <Tabs.Screen name="Contact" component={Contact} options={{ headerShown: false,
+                tabBarIcon: ({ color, size }) => {
+                    return (
+                        <View>
+                             <Image source={require("../../assets/images/user.png")}  />
+                        </View>
+                    )
+                },
+                tabBarActiveTintColor: "#24786D",
+             }} />
+            <Tabs.Screen name="Settings" component={Settings} options={{ headerShown: false,
+                tabBarIcon: ({ color, size }) => {
+                    return (
+                        <View>
+                             <Image source={require("../../assets/images/settings.png")}  />
+                        </View>
+                    )
+                },
+                tabBarActiveTintColor: "#24786D",
+             }} />
           
         </Tabs.Navigator>
     )
