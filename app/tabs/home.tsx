@@ -4,6 +4,49 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Tab = createBottomTabNavigator();
 
+
+const messages = [
+    {
+        id: 1,
+        name: "Adil",
+        image: require("../../assets/images/friendOne.png"),
+        message: "Hi ! there"
+    },
+    {
+        id: 2,
+        name: "Marina",
+        image: require("../../assets/images/friendTwo.png"),
+        message: "Hi ! there"
+    },
+    {
+        id: 3,
+        name: "Dean",
+        image: require("../../assets/images/friendThree.png"),
+        message: "Hi ! there"
+    },
+    {
+        id: 4,
+        name: "John Doe",
+        image: require("../../assets/images/friendFour.png"),
+        message: "Hi ! there"
+
+    },
+    {
+        id: 5,
+        name: "John Doe",
+        image: require("../../assets/images/friendFour.png"),
+        message: "Hi ! there"
+
+    },
+    {
+        id: 6,
+        name: "Uttam",
+        image: require("../../assets/images/friendFour.png"),
+        message: "Hi ! there"
+
+    }
+]
+
 export default function Home() {
 
     const friends = [
@@ -31,14 +74,17 @@ export default function Home() {
             image: require("../../assets/images/friendFour.png"),
             message: "Hi ! there"
 
-        }
+        },
+
+
     ]
 
+ 
     const handleUserClick = (id: number) => {
         console.log(id)
     }
     return (
-        <SafeAreaView className="bg-homebg h-screen">
+        <SafeAreaView className="bg-homebg flex-1">
 
             <View className="mt-10 mb-5 mx-6 flex flex-row  items-center">
                 <View className="flex flex-row items-center flex-1 gap-x-1 relative">
@@ -63,24 +109,27 @@ export default function Home() {
 
             </View>
 
-            <View className="chat-details bg-primary rounded-t-2xl h-screen p-2.5" >
+            <View className="chat-details bg-primary rounded-t-2xl p-2.5 flex-1">
                 <FlatList
-                    data={friends.reverse()}
+                    data={messages}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <TouchableOpacity 
-                    className="flex flex-row gap-x-4 items-center my-2.5 border-b-[1px] pb-4 border-white"
-                    onPress={() => handleUserClick(item.id)}
-                    >
-                        <View>
-                            <Image source={item.image} />
-
-                        </View>
-                        <View className="flex-1">
-                            <Text className="text-black text-xl font-semibold ml-2">{item.name}</Text>
-                            <Text className="text-white text-base font-normal ml-2">{item.message}</Text></View>
-                    </TouchableOpacity>}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            className="flex flex-row gap-x-4 items-center my-2.5 border-b-[1px] pb-4 border-white"
+                            onPress={() => handleUserClick(item.id)}
+                        >
+                            <View>
+                                <Image source={item.image} />
+                            </View>
+                            <View className="flex-1">
+                                <Text className="text-black text-xl font-semibold ml-2">{item.name}</Text>
+                                <Text className="text-white text-base font-normal ml-2">{item.message}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                    style={{ flex: 1 }}
                     numColumns={1}
-
                 />
             </View>
         </SafeAreaView>
