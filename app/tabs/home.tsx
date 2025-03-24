@@ -1,6 +1,7 @@
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useRouter } from "expo-router";
 
 const Tab = createBottomTabNavigator();
 
@@ -49,6 +50,7 @@ const messages = [
 
 export default function Home() {
 
+    const router = useRouter();
     const friends = [
         {
             id: 1,
@@ -81,7 +83,7 @@ export default function Home() {
 
  
     const handleUserClick = (id: number) => {
-        console.log(id)
+        router.push("/tabs/message")
     }
     return (
         <SafeAreaView className="bg-homebg flex-1">
@@ -117,6 +119,7 @@ export default function Home() {
                         <TouchableOpacity
                             className="flex flex-row gap-x-4 items-center my-2.5 border-b-[1px] pb-4 border-white"
                             onPress={() => handleUserClick(item.id)}
+                            activeOpacity={1}
                         >
                             <View>
                                 <Image source={item.image} />
