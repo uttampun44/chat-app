@@ -82,8 +82,11 @@ export default function Home() {
     ]
 
  
-    const handleUserClick = (id: number) => {
-        router.push("/tabs/message")
+    const handleUserClick = (item: any) => {
+        router.push({
+            pathname: `/screens/message/message/${item.id}`,
+            params: item,
+        })
     }
     return (
         <SafeAreaView className="bg-homebg flex-1">
@@ -118,7 +121,7 @@ export default function Home() {
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             className="flex flex-row gap-x-4 items-center my-2.5 border-b-[1px] pb-4 border-white"
-                            onPress={() => handleUserClick(item.id)}
+                            onPress={() => handleUserClick(item)}
                             activeOpacity={1}
                         >
                             <View>
