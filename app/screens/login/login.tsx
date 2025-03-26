@@ -5,6 +5,7 @@ import { Alert, FlatList, Image, Text, TextInput, TouchableOpacity, View } from 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm } from "react-hook-form";
 import {loginForm} from "@/types/login";
+import * as Google from "expo-auth-session/providers/google";
 
 export default function login() {
 
@@ -14,6 +15,12 @@ export default function login() {
         return item !== socialIcon[index]
     })
 
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        clientId: "YOUR_CLIENT_ID",
+        clientSecret: "YOUR_CLIENT_SECRET",
+        androidClientId: "YOUR_ANDROID_CLIENT_ID",
+    })
+
     const { control, formState: { errors }, handleSubmit } = useForm<loginForm>({
 
         defaultValues: {
@@ -21,7 +28,7 @@ export default function login() {
             password: "",
         },
     });
-
+    
     const router = useRouter();
 
     const handleBack = () => {

@@ -83,10 +83,7 @@ export default function Home() {
 
  
     const handleUserClick = (item: any) => {
-        router.push({
-            pathname: `/screens/message/message/${item.id}`,
-            params: item,
-        })
+       
     }
     return (
         <SafeAreaView className="bg-homebg flex-1">
