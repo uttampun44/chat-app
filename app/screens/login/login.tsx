@@ -1,11 +1,15 @@
 import socialIcon from "@/utils/onboarding";
 import { Stack, useRouter } from "expo-router";
 import { Controller } from "react-hook-form";
-import { Alert, FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm } from "react-hook-form";
 import {loginForm} from "@/types/login";
 import * as Google from "expo-auth-session/providers/google";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
+import useFetch from "@/hooks/api/useFetch";
+import { CONFIG } from "../../config";
 
 export default function login() {
 
@@ -15,10 +19,16 @@ export default function login() {
         return item !== socialIcon[index]
     })
 
+    const [user, setUser] = useState();
+    const [token, setToken] = useState();
+
+    console.log(CONFIG.GOOGLE_WEB_CLIENT_ID)
+
     const [request, response, promptAsync] = Google.useAuthRequest({
-        clientId: "YOUR_CLIENT_ID",
-        clientSecret: "YOUR_CLIENT_SECRET",
-        androidClientId: "YOUR_ANDROID_CLIENT_ID",
+        webClientId: CONFIG.GOOGLE_WEB_CLIENT_ID,
+        clientId: CONFIG.GOOGLE_CLIENT_ID,
+        clientSecret: CONFIG.GOOGLE_CLIENT_SECRET,
+        androidClientId: CONFIG.GOOGLE_ANDROID_CLIENT_ID,
     })
 
     const { control, formState: { errors }, handleSubmit } = useForm<loginForm>({
@@ -43,6 +53,21 @@ export default function login() {
       router.push("/screens/forgetpassword/forgetpassword")
     }
 
+    const handleSubmitGoogle = async ():Promise<void> => {
+        const result = await AsyncStorage.getItem("token");
+        if(!result) return;
+        const token = JSON.parse(result);
+        setToken(token)
+        if(token.accessToken) {
+            router.push("/tabs/home")
+            setUser(JSON.parse(result))
+        }
+      };
+
+    
+
+      const useInfo = useFetch("https://api.chatbox.com/user", token)
+
     return (
         <SafeAreaView>
             <Stack.Screen name="login" options={{ headerShown: false }} />
@@ -57,7 +82,11 @@ export default function login() {
                 <FlatList
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <View><Image source={item.source} /></View>}
+                    renderItem={({ item }) => <View>
+                      <TouchableOpacity onPress={() => promptAsync()}>
+                      <Image source={item.source} />
+                      </TouchableOpacity>
+                    </View>}
                     className="social-icons *:flex-row"
                     numColumns={3}
                 />

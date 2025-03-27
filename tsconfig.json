@@ -4,7 +4,7 @@
     "strict": true,
     "paths": {
       "@/pages/*": [
-        "./app/pages/*"
+        "./app/screens/*"
       ],
       "@/components/*": [
         "./app/components/*"
@@ -13,7 +13,7 @@
         "./assets/*"
       ],
       "@/hooks/*": [
-        "./hooks/*"
+        "./app/hooks/*"
       ],
       "@/utils/*": [
         "./app/utils/*"
@@ -32,7 +32,10 @@
       ],
       "@/lib/*": [
         "./app/lib/*"
-      ]
+      ],
+      "@/context/*": [
+        "./app/context/*"
+      ],
     }
   },
   "include": [
