@@ -3,10 +3,16 @@ import { Button, Image, Text, TextInput, TouchableOpacity, View } from "react-na
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Controller, useForm } from "react-hook-form"
 import {signUpFormTypes} from "@/types/signup";
+import usePost from "@/hooks/api/usePost";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/auth/useAuth";
 
 export default function Signup() {
 
    const router = useRouter();
+
+   const {token, setToken} = useAuth()
+   const post = usePost("/api/v1/sign-up")
 
    const { handleSubmit, control, formState: { errors } } = useForm<signUpFormTypes>({
       defaultValues: {
@@ -22,6 +28,9 @@ export default function Signup() {
    }
 
    const onSubmit = (data: signUpFormTypes) => {
+      if(!post) return
+        setToken(data)
+        toast.success("Signup successfully")
       router.push("/screens/login/login")
    }
 
@@ -113,7 +122,7 @@ export default function Signup() {
                }}
             />
             {
-               errors.password && <Text className="text-danger text-sm">Please Enter your password</Text>
+               errors.password && <Text className="text-danger text-sm">Please Enter your confirm password</Text>
             }
             <TouchableOpacity className="bg-secondary rounded-md mt-8 mb-6 py-4 px-20" onPress={handleSubmit(onSubmit)}>
                <Text className="text-white text-center font-medium">Create an account</Text>

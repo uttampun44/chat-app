@@ -81,9 +81,9 @@ export default function Home() {
 
     ]
 
- 
+
     const handleUserClick = (item: any) => {
-       
+
     }
     return (
         <SafeAreaView className="bg-homebg flex-1">
@@ -93,7 +93,9 @@ export default function Home() {
 
                     <TextInput className="text-black text-base font-normal outline-none border-[1px] bg-[#F3F6F6] p-1 border-[#F3F6F6] rounded-md w-full" placeholder="Search Friends..." />
                 </View>
-                <Image source={require("../../assets/images/profile.png")} className="ml-4 w-9 h-9" />
+                <TouchableOpacity onPress={() => router.push("/screens/userprofile/userprofile")}>
+                    <Image source={require("../../assets/images/profile.png")} className="ml-4 w-9 h-9" />
+                </TouchableOpacity>
             </View>
 
             <Text className="text-white text-xl font-medium ml-6">Friends</Text>

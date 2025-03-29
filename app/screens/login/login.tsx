@@ -10,6 +10,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import useFetch from "@/hooks/api/useFetch";
 import { CONFIG } from "../../config";
+import { useAuth } from "@/hooks/auth/useAuth";
+import usePost from "@/hooks/api/usePost";
+import { toast } from "sonner";
 
 export default function login() {
 
@@ -19,13 +22,13 @@ export default function login() {
         return item !== socialIcon[index]
     })
 
-    const [user, setUser] = useState();
-    const [token, setToken] = useState();
+    const {token, setToken} = useAuth()
+    const post = usePost("/api/v1/")
 
     console.log(CONFIG.GOOGLE_WEB_CLIENT_ID)
 
     const [request, response, promptAsync] = Google.useAuthRequest({
-        webClientId: CONFIG.GOOGLE_WEB_CLIENT_ID,
+        webClientId: CONFIG.GOOGLE_WEB_CLIENT_ID || "",
         clientId: CONFIG.GOOGLE_CLIENT_ID,
         clientSecret: CONFIG.GOOGLE_CLIENT_SECRET,
         androidClientId: CONFIG.GOOGLE_ANDROID_CLIENT_ID,
@@ -46,6 +49,9 @@ export default function login() {
     }
 
     const onSubmit = (data: loginForm) => {
+       if(!post) return
+       setToken(data)
+        toast.success("Register Success")
        router.push("/tabs/home")
     }
 
@@ -60,7 +66,7 @@ export default function login() {
         setToken(token)
         if(token.accessToken) {
             router.push("/tabs/home")
-            setUser(JSON.parse(result))
+          
         }
       };
 
@@ -83,7 +89,7 @@ export default function login() {
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => <View>
-                      <TouchableOpacity onPress={() => promptAsync()}>
+                      <TouchableOpacity onPress={() => handleSubmit(item)}>
                       <Image source={item.source} />
                       </TouchableOpacity>
                     </View>}

@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,16 +9,23 @@ interface forgetPasswordFields {
 
 export default function forgetPassword() {
 
+    const router = useRouter()
     const { control, formState: { errors }, handleSubmit } = useForm<forgetPasswordFields>()
-
     const handleOtp = (data: forgetPasswordFields) => {
         console.log("handle otp")
     }
+    const handleBack = () => {
+        router.push("/screens/login/login")
+    }
     return (
-        <SafeAreaView className="flex-1 justify-center items-center">
+        <SafeAreaView className="">
             <Stack.Screen name="login" options={{ headerShown: false }} />
-             
-            <View className="px-6 w-full ">
+            <TouchableOpacity onPress={handleBack}>
+                <View className="mt-3 mb-16 ml-6">
+                    <Image source={require("../../../assets/images/Back.png")} />
+                </View>
+            </TouchableOpacity>
+            <View className="px-6 w-full flex-1 justify-center items-center ">
 
                 <View className="flex justify-center items-center mb-2.5"><Image source={require("../../../assets/images/splash.png")} className="w-full h-full object-contain" /></View>
                 <Text className="text-secondary text-sm font-medium">Your Email</Text>
