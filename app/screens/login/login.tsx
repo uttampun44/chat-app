@@ -1,3 +1,4 @@
+// @ts-nocheck
 import socialIcon from "@/utils/onboarding";
 import { Stack, useRouter } from "expo-router";
 import { Controller } from "react-hook-form";
@@ -14,7 +15,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import usePost from "@/hooks/api/usePost";
 import { toast } from "sonner";
 
-export default function login() {
+export default function Login() {
 
     //  to pop the index 2 from the array
     let index = 2

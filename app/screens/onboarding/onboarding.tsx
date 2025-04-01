@@ -36,7 +36,9 @@ export default function OnBoarding() {
                 <FlatList
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <View><Image source={item.source} /></View>}
+                    renderItem={({ item }) => <View>
+                    <Image source={item.source} testID="social-icon" />
+                    </View>}
                     className="social-icons *:flex-row"
                     numColumns={3}
                 />
