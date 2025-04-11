@@ -8,7 +8,7 @@ export default function TabLayout() {
     const Tabs = createBottomTabNavigator()
     return (
         <Tabs.Navigator >
-            <Tabs.Screen name="Home" component={Home} options={{ headerShown: false,
+            <Tabs.Screen name="home" component={Home} options={{ headerShown: false,
                 tabBarIcon: ({ color, size }) => {
                     return (
                         <View>
@@ -18,7 +18,7 @@ export default function TabLayout() {
                 },
                 tabBarActiveTintColor: "#24786D",
             }} />
-            <Tabs.Screen name="Contact" component={Contact} options={{ headerShown: false,
+            <Tabs.Screen name="contact" component={Contact} options={{ headerShown: false,
                 tabBarIcon: ({ color, size }) => {
                     return (
                         <View>
@@ -28,7 +28,7 @@ export default function TabLayout() {
                 },
                 tabBarActiveTintColor: "#24786D",
              }} />
-            <Tabs.Screen name="Settings" component={Settings} options={{ headerShown: false,
+            <Tabs.Screen name="settings" component={Settings} options={{ headerShown: false,
                 tabBarIcon: ({ color, size }) => {
                     return (
                         <View>

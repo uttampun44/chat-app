@@ -7,7 +7,7 @@ import { Stack } from "expo-router";
 export default function Index() {
   return (
      <SafeAreaView className="flex-1">
-        <Stack.Screen name="splash" options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen  options={{ headerShown: false, animation: 'fade' }} />
         <Splash />
       </SafeAreaView>
   );

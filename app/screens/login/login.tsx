@@ -2,10 +2,10 @@
 import socialIcon from "@/utils/onboarding";
 import { Stack, useRouter } from "expo-router";
 import { Controller } from "react-hook-form";
-import {FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm } from "react-hook-form";
-import {loginForm} from "@/types/login";
+import { loginForm } from "@/types/login";
 import * as Google from "expo-auth-session/providers/google";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import usePost from "@/hooks/api/usePost";
 import { toast } from "sonner";
 
+
 export default function Login() {
 
     //  to pop the index 2 from the array
@@ -23,9 +24,10 @@ export default function Login() {
         return item !== socialIcon[index]
     })
 
-    const {token, setToken} = useAuth()
-    const post = usePost("/api/v1/")
+    const { token, setToken } = useAuth()
 
+    const post = usePost("/api/v1/login")
+ 
     console.log(CONFIG.GOOGLE_WEB_CLIENT_ID)
 
     const [request, response, promptAsync] = Google.useAuthRequest({
@@ -35,45 +37,43 @@ export default function Login() {
         androidClientId: CONFIG.GOOGLE_ANDROID_CLIENT_ID,
     })
 
-    const { control, formState: { errors }, handleSubmit } = useForm<loginForm>({
+    const { control, formState: { errors }, handleSubmit } = useForm<loginForm>();
 
-        defaultValues: {
-            email: "",
-            password: "",
-        },
-    });
-    
     const router = useRouter();
 
     const handleBack = () => {
         router.push("/screens/onboarding/onboarding")
     }
 
-    const onSubmit = (data: loginForm) => {
-       if(!post) return
-       setToken(data)
-        toast.success("Register Success")
-       router.push("/tabs/home")
+    const onSubmit = async(data: loginForm): Promise<void> => {
+        try {
+            
+            const response  = await post.mutateAsync(data);
+            
+            console.log(response)
+            const tokenData = await AsyncStorage.setItem("token", JSON.stringify(token))
+            setToken(response.token)
+            toast.success("Login Success")
+            router.push("/tabs/home")
+        } catch (error) {
+          toast.error("Login Failed")
+        }
     }
 
     const handleForgetPassword = () => {
-      router.push("/screens/forgetpassword/forgetpassword")
+        router.push("/screens/forgetpassword/forgetpassword")
     }
 
-    const handleSubmitGoogle = async ():Promise<void> => {
+    const handleSubmitGoogle = async (): Promise<void> => {
         const result = await AsyncStorage.getItem("token");
-        if(!result) return;
+        if (!result) return;
         const token = JSON.parse(result);
         setToken(token)
-        if(token.accessToken) {
+        if (token.accessToken) {
             router.push("/tabs/home")
-          
+
         }
-      };
-
-    
-
-      const useInfo = useFetch("https://api.chatbox.com/user", token)
+    };
 
     return (
         <SafeAreaView>
@@ -90,9 +90,9 @@ export default function Login() {
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => <View>
-                      <TouchableOpacity onPress={() => handleSubmit(item)}>
-                      <Image source={item.source} />
-                      </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleSubmit(item)}>
+                            <Image source={item.source} />
+                        </TouchableOpacity>
                     </View>}
                     className="social-icons *:flex-row"
                     numColumns={3}
@@ -107,12 +107,10 @@ export default function Login() {
                     name="email"
                     render={({ field: { onChange, value } }) => (
                         <TextInput
-
                             onChangeText={onChange}
-
                             value={value}
-                            placeholder="Enter your email"
-                            className="w-full border-b-[1px] border-primary outline-none mt-2.5"
+                            className="w-full border-b-[1px] border-primary outline-none mt-2.5 text-base font-medium"
+                            defaultValue=""
                         />
                     )}
                     rules={{ required: true }}
@@ -126,12 +124,12 @@ export default function Login() {
                         <TextInput
                             onChangeText={onChange}
                             value={value}
-                            placeholder="Enter your password"
-                            className="w-full border-b-[1px] border-primary outline-none mt-2.5"
+                            className="w-full border-b-[1px] border-primary text-homebg outline-none mt-2.5 text-base font-medium"
                             secureTextEntry={true}
+                            defaultValue=""
                         />
                     )}
-                    rules={{ required: true }}                    
+                    rules={{ required: true }}
                 />
                 {errors.password && <Text className="text-danger text-sm mt-1">Please enter a password</Text>}
             </View>

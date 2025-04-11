@@ -1,12 +1,31 @@
-import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+// @ts-nocheck
+
+import { FlatList, Image, Text, TextInput, TouchableOpacity, View, Modal, StyleSheet, LayoutChangeEvent } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useRouter } from "expo-router";
+import { useState, useRef } from "react";
+import usePost from "@/hooks/api/usePost";
+import { toast } from "sonner";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
+interface MessageItem {
+  id: number;
+  name: string;
+  image: any;
+  message: string;
+}
 
-const messages = [
+interface PositionData {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const messages: MessageItem[] = [
     {
         id: 1,
         name: "Adil",
@@ -30,28 +49,29 @@ const messages = [
         name: "John Doe",
         image: require("../../assets/images/friendFour.png"),
         message: "Hi ! there"
-
     },
     {
         id: 5,
         name: "John Doe",
         image: require("../../assets/images/friendFour.png"),
         message: "Hi ! there"
-
     },
     {
         id: 6,
         name: "Uttam",
         image: require("../../assets/images/friendFour.png"),
         message: "Hi ! there"
-
     }
-]
+];
 
 export default function Home() {
-
+    const [visible, setVisible] = useState<boolean>(false);
+    const [profilePosition, setProfilePosition] = useState<PositionData>({ x: 0, y: 0, width: 0, height: 0 });
+    const profileRef = useRef<TouchableOpacity | null>(null);
     const router = useRouter();
-    const friends = [
+    
+    const postLogout = usePost("/api/v1/logout"); 
+    const friends: MessageItem[] = [
         {
             id: 1,
             name: "Adil",
@@ -75,42 +95,105 @@ export default function Home() {
             name: "John Doe",
             image: require("../../assets/images/friendFour.png"),
             message: "Hi ! there"
-
         },
+    ];
 
+    const handleUserClick = (item: MessageItem): void => {
+       
+    };
+    
+    const openProfileModal = (): void => {
+       
+        profileRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
+            setProfilePosition({ x: pageX, y: pageY, width, height });
+            setVisible(true);
+        });
+    };
 
-    ]
-
-
-    const handleUserClick = (item: any) => {
-
+    const handleLogout = async():Promise <void> =>{
+        try {
+             await postLogout.mutateAsync({});
+             await AsyncStorage.removeItem('token');
+             router.replace("/screens/login/login");
+             toast.success("Logged out successfully");
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     }
+    
     return (
         <SafeAreaView className="bg-homebg flex-1">
-
-            <View className="mt-10 mb-5 mx-6 flex flex-row  items-center">
+            <View className="mt-10 mb-5 mx-6 flex flex-row items-center">
                 <View className="flex flex-row items-center flex-1 gap-x-1 relative">
-
-                    <TextInput className="text-black text-base font-normal outline-none border-[1px] bg-[#F3F6F6] p-1 border-[#F3F6F6] rounded-md w-full" placeholder="Search Friends..." />
+                    <TextInput 
+                        className="text-black text-base font-normal outline-none border-[1px] bg-[#F3F6F6] p-1 border-[#F3F6F6] rounded-md w-full" 
+                        placeholder="Search Friends..." 
+                    />
                 </View>
-                <TouchableOpacity onPress={() => router.push("/screens/userprofile/userprofile")}>
+                <TouchableOpacity 
+                    ref={profileRef}
+                    onPress={openProfileModal} 
+                    className="relative">
                     <Image source={require("../../assets/images/profile.png")} className="ml-4 w-9 h-9" />
                 </TouchableOpacity>
             </View>
+
+            <Modal
+                visible={visible}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setVisible(false)}>
+                <TouchableOpacity 
+                    style={StyleSheet.absoluteFill}
+                    onPress={() => setVisible(false)}
+                    activeOpacity={1}>
+                    <View 
+                        style={{
+                            position: 'absolute',
+                            top: profilePosition.y + profilePosition.height,
+                            right: 20,
+                            backgroundColor: 'white',
+                            borderRadius: 8,
+                            padding: 12,
+                            shadowColor: "#000",
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 0.25,
+                            shadowRadius: 3.84,
+                            elevation: 5,
+                        }}>
+                        <TouchableOpacity 
+                            onPress={() => {
+                                setVisible(false);
+                            }}
+                            className="py-2">
+                            <Text className="text-black text-base font-medium">Profile</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            onPress={handleLogout}
+                            className="py-2">
+                            <Text className="text-black text-base font-medium">Logout</Text>
+                        </TouchableOpacity>
+                    </View>
+                </TouchableOpacity>
+            </Modal>
 
             <Text className="text-white text-xl font-medium ml-6">Friends</Text>
             <View className="my-5 mx-6">
                 <FlatList
                     data={friends}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <View className="flex flex-col items-center">
-                        <Image source={item.image} />
-                        <Text className="text-white text-xl font-medium ml-2">{item.name}</Text>
-                    </View>}
+                    renderItem={({ item }) => (
+                        <View className="flex flex-col items-center">
+                            <Image source={item.image} />
+                            <Text className="text-white text-xl font-medium ml-2">{item.name}</Text>
+                        </View>
+                    )}
                     numColumns={4}
                     columnWrapperStyle={{ columnGap: 16, justifyContent: "space-between", alignItems: "center" }}
                 />
-
             </View>
 
             <View className="chat-details bg-primary rounded-t-2xl p-2.5 flex-1">
@@ -138,5 +221,5 @@ export default function Home() {
                 />
             </View>
         </SafeAreaView>
-    )
+    );
 }
