@@ -8,6 +8,8 @@ import { useState, useRef } from "react";
 import usePost from "@/hooks/api/usePost";
 import { toast } from "sonner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -114,6 +116,7 @@ export default function Home() {
         try {
              await postLogout.mutateAsync({});
              await AsyncStorage.removeItem('token');
+             await GoogleSignin.signOut()
              router.replace("/screens/login/login");
              toast.success("Logged out successfully");
         } catch (error) {

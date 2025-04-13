@@ -14,7 +14,7 @@ import { CONFIG } from "../../config";
 import { useAuth } from "@/hooks/auth/useAuth";
 import usePost from "@/hooks/api/usePost";
 import { toast } from "sonner";
-
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function Login() {
 
@@ -38,9 +38,6 @@ export default function Login() {
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: CONFIG.GOOGLE_WEB_CLIENT_ID || "",
-        clientId: CONFIG.GOOGLE_CLIENT_ID,
-        clientSecret: CONFIG.GOOGLE_CLIENT_SECRET,
-        androidClientId: CONFIG.GOOGLE_ANDROID_CLIENT_ID,
     })
 
     const { control, formState: { errors }, handleSubmit } = useForm<loginForm>();
@@ -71,8 +68,17 @@ export default function Login() {
         router.push("/screens/forgetpassword/forgetpassword")
     }
 
-    const handleSubmitGoogle = async (): Promise<void> => {
-
+    const handleSubmitGoogle = async (item): Promise<void> => {
+         if(icons.find(iconsItem => iconsItem.id == item.id)){
+            try {
+                 await GoogleSignin.hasPlayServices();
+                 const response = await GoogleSignin.signIn()
+                 console.log(response)
+                 toast.success("Successfully Authentication With Google")
+            } catch (error) {
+                 toast.error("Couldn't log in")
+            }
+         }
     };
 
 
