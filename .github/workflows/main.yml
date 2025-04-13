@@ -9,9 +9,13 @@ jobs:
     build:
      runs-on: ubuntu-latest
      steps:
+      - name: Setup node js
+        uses: actions/setup-node@v3
+        with: 
+        node-version: "22.0"
+
       - name: Install dependencies
         run:  npm install
-      - name: Run app
-        run : npm expo start  
+        
       - name: Build
-        run:  npmrun build
+        run:  npm run build
