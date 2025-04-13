@@ -2,7 +2,7 @@
 import socialIcon from "@/utils/onboarding";
 import { Stack, useRouter } from "expo-router";
 import { Controller } from "react-hook-form";
-import { FlatList, Image, Text, TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm } from "react-hook-form";
 import { loginForm } from "@/types/login";
@@ -26,6 +26,14 @@ export default function Login() {
 
     const { token, setToken } = useAuth()
 
+    console.log(token);
+
+    const post = usePost("/api/v1/login", {
+        headers: {
+            Authorization: `Bearer-${token}`
+        }
+    })
+
     const post = usePost("/api/v1/login")
  
     console.log(CONFIG.GOOGLE_WEB_CLIENT_ID)
@@ -38,25 +46,26 @@ export default function Login() {
     })
 
     const { control, formState: { errors }, handleSubmit } = useForm<loginForm>();
-
     const router = useRouter();
 
     const handleBack = () => {
         router.push("/screens/onboarding/onboarding")
     }
 
-    const onSubmit = async(data: loginForm): Promise<void> => {
+    const onSubmit = (data: loginForm) => {
         try {
-            
-            const response  = await post.mutateAsync(data);
-            
-            console.log(response)
-            const tokenData = await AsyncStorage.setItem("token", JSON.stringify(token))
-            setToken(response.token)
+            post.mutateAsync(data)
             toast.success("Login Success")
-            router.push("/tabs/home")
+            const result = await AsyncStorage.getItem("token");
+            if (!result) return;
+            const token = JSON.parse(result);
+            setToken(token)
+            if (token.accessToken) {
+                router.push("/tabs/home")
+
+            }
         } catch (error) {
-          toast.error("Login Failed")
+            toast.error("Something went wrong")
         }
     }
 
@@ -65,15 +74,12 @@ export default function Login() {
     }
 
     const handleSubmitGoogle = async (): Promise<void> => {
-        const result = await AsyncStorage.getItem("token");
-        if (!result) return;
-        const token = JSON.parse(result);
-        setToken(token)
-        if (token.accessToken) {
-            router.push("/tabs/home")
 
-        }
     };
+
+
+
+    const useInfo = useFetch("https://api.chatbox.com/user", token)
 
     return (
         <SafeAreaView>

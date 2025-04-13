@@ -3,16 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner"
 
-export default function useFetch<T = any>(url: string, token?:string) {
+export default function useFetch<T = any>(url: string) {
 
     const fetchData = async ():Promise<T> => {
-        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : undefined;
-        const response = await axiosInstance.get(url, config);
+        const response = await axiosInstance.get(url);
         return response.data;
     };
 
     const { isPending, isSuccess, isError, data } = useQuery<T>({
-        queryKey: ["fetchData", url, token],
+        queryKey: ["fetchData", url],
         queryFn: fetchData,
     })
 
