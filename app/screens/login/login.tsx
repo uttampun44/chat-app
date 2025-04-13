@@ -34,8 +34,6 @@ export default function Login() {
         }
     })
 
-    const post = usePost("/api/v1/login")
- 
     console.log(CONFIG.GOOGLE_WEB_CLIENT_ID)
 
     const [request, response, promptAsync] = Google.useAuthRequest({
