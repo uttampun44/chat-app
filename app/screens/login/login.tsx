@@ -39,14 +39,16 @@ export default function Login() {
         router.push("/screens/onboarding/onboarding")
     }
   
-    const onSubmit = async(data: loginForm) => {
+    const onSubmit = async(formData: loginForm) => {
      
+        console.log(token, "and formData ", formData)
         try {
-            const response = await post.mutateAsync({...data,  
+            const response = await post.mutateAsync({data:formData,  
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                  },
             })
            console.log(response.token)
            if(response.token){

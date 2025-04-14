@@ -15,17 +15,17 @@ import { useAuth } from "@/hooks/auth/useAuth";
 const Tab = createBottomTabNavigator();
 
 interface MessageItem {
-  id: number;
-  name: string;
-  image: any;
-  message: string;
+    id: number;
+    name: string;
+    image: any;
+    message: string;
 }
 
 interface PositionData {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
 }
 
 const messages: MessageItem[] = [
@@ -72,15 +72,9 @@ export default function Home() {
     const [profilePosition, setProfilePosition] = useState<PositionData>({ x: 0, y: 0, width: 0, height: 0 });
     const profileRef = useRef<TouchableOpacity | null>(null);
     const router = useRouter();
-    const {token} = useAuth()
-    
-    const postLogout = usePost("/api/v1/logout", {
-         headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            Authorization: `Bearer ${token}`
-         }
-    }); 
+    const { token } = useAuth()
+
+    const postLogout = usePost("/api/v1/logout");
     const friends: MessageItem[] = [
         {
             id: 1,
@@ -109,57 +103,53 @@ export default function Home() {
     ];
 
     const handleUserClick = (item: MessageItem): void => {
-       
+
     };
-    
+
     const openProfileModal = (): void => {
-       
+
         profileRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
             setProfilePosition({ x: pageX, y: pageY, width, height });
             setVisible(true);
         });
     };
 
-    const handleLogout = async():Promise <void> =>{
+    const handleLogout = async (): Promise<void> => {
         try {
-            
+
             const token = await AsyncStorage.getItem('token');
-            console.log(token)
             if (!token) {
                 throw new Error('No authentication token found');
             }
 
-            await postLogout.mutateAsync({});
-            
-            // Clear storage
-            await AsyncStorage.removeItem('token');
-            
-            const isSignedIn = await GoogleSignin.isSignedIn();
-            if (isSignedIn) {
-                await GoogleSignin.signOut();
-            }
+            await postLogout.mutateAsync({
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+        } catch (error: any) {
+            console.log("Logout error:", error?.response?.data || error?.message || error);
 
+        } finally {
+            await AsyncStorage.removeItem('token');
             setVisible(false);
-            router.replace("/screens/login/login");
+            router.push("/screens/login/login");
             toast.success("Logged out successfully");
-           
-        } catch (error) {
-            toast.error("Something went wrong");
         }
     }
-    
+
     return (
         <SafeAreaView className="bg-homebg flex-1">
             <View className="mt-10 mb-5 mx-6 flex flex-row items-center">
                 <View className="flex flex-row items-center flex-1 gap-x-1 relative">
-                    <TextInput 
-                        className="text-black text-base font-normal outline-none border-[1px] bg-[#F3F6F6] p-1 border-[#F3F6F6] rounded-md w-full" 
-                        placeholder="Search Friends..." 
+                    <TextInput
+                        className="text-black text-base font-normal outline-none border-[1px] bg-[#F3F6F6] p-1 border-[#F3F6F6] rounded-md w-full"
+                        placeholder="Search Friends..."
                     />
                 </View>
-                <TouchableOpacity 
+                <TouchableOpacity
                     ref={profileRef}
-                    onPress={openProfileModal} 
+                    onPress={openProfileModal}
                     className="relative">
                     <Image source={require("../../assets/images/profile.png")} className="ml-4 w-9 h-9" />
                 </TouchableOpacity>
@@ -170,11 +160,11 @@ export default function Home() {
                 transparent={true}
                 animationType="fade"
                 onRequestClose={() => setVisible(false)}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={StyleSheet.absoluteFill}
                     onPress={() => setVisible(false)}
                     activeOpacity={1}>
-                    <View 
+                    <View
                         style={{
                             position: 'absolute',
                             top: profilePosition.y + profilePosition.height,
@@ -191,14 +181,14 @@ export default function Home() {
                             shadowRadius: 3.84,
                             elevation: 5,
                         }}>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => {
                                 setVisible(false);
                             }}
                             className="py-2">
                             <Text className="text-black text-base font-medium">Profile</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={handleLogout}
                             className="py-2">
                             <Text className="text-black text-base font-medium">Logout</Text>
