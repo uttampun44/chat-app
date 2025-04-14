@@ -8,9 +8,19 @@ on:
 jobs:
     build:
      runs-on: ubuntu-latest
+
      steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+       # Setup Git configuration
+      - name: Setup git
+        run: |
+          git config --global user.name 'uttampun'
+          git config --global user.email 'uttampun50@gmail.com'
+    
+      - name: Checkout repository
+        uses: actions/checkout@
+        
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       # Install bun
         with:
