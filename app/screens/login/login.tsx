@@ -41,7 +41,6 @@ export default function Login() {
   
     const onSubmit = async(formData: loginForm) => {
      
-        console.log(token, "and formData ", formData)
         try {
             const response = await post.mutateAsync({data:formData,  
                 headers: {
@@ -50,7 +49,7 @@ export default function Login() {
                     Authorization: `Bearer ${token}`,
                   },
             })
-           console.log(response.token)
+        
            if(response.token){
                await AsyncStorage.setItem("token", response.token);
                setToken(response.token)
