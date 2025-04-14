@@ -9,13 +9,12 @@ jobs:
     build:
      runs-on: ubuntu-latest
      steps:
-      - name: Setup node js
-        uses: actions/setup-node@v3
-        with: 
-         node-version: "22.12.0"
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
-        run:  npm install
-        
-      - name: Build
-        run:  npm run build
+      # Install bun
+        with:
+          bun-version: latest
+       
+          # Install dependencies
+      - run: bun install
