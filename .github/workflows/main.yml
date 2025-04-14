@@ -17,7 +17,7 @@ jobs:
           git config --global user.email 'uttampun50@gmail.com'
     
       - name: Checkout repository
-        uses: actions/checkout@
+        uses: actions/checkout@v4
         
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
