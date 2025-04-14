@@ -9,6 +9,7 @@ import usePost from "@/hooks/api/usePost";
 import { toast } from "sonner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useAuth } from "@/hooks/auth/useAuth";
 
 
 const Tab = createBottomTabNavigator();
@@ -71,8 +72,15 @@ export default function Home() {
     const [profilePosition, setProfilePosition] = useState<PositionData>({ x: 0, y: 0, width: 0, height: 0 });
     const profileRef = useRef<TouchableOpacity | null>(null);
     const router = useRouter();
+    const {token} = useAuth()
     
-    const postLogout = usePost("/api/v1/logout"); 
+    const postLogout = usePost("/api/v1/logout", {
+         headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            Authorization: `Bearer ${token}`
+         }
+    }); 
     const friends: MessageItem[] = [
         {
             id: 1,
@@ -114,11 +122,27 @@ export default function Home() {
 
     const handleLogout = async():Promise <void> =>{
         try {
-             await postLogout.mutateAsync({});
-             await AsyncStorage.removeItem('token');
-             await GoogleSignin.signOut()
-             router.replace("/screens/login/login");
-             toast.success("Logged out successfully");
+            
+            const token = await AsyncStorage.getItem('token');
+            console.log(token)
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            await postLogout.mutateAsync({});
+            
+            // Clear storage
+            await AsyncStorage.removeItem('token');
+            
+            const isSignedIn = await GoogleSignin.isSignedIn();
+            if (isSignedIn) {
+                await GoogleSignin.signOut();
+            }
+
+            setVisible(false);
+            router.replace("/screens/login/login");
+            toast.success("Logged out successfully");
+           
         } catch (error) {
             toast.error("Something went wrong");
         }
