@@ -35,7 +35,7 @@ export default function forgetPassword() {
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             onChangeText={onChange}
-                            value={value}
+                            value={value || ""}
                             placeholder="Enter your email"
                             className="w-full border-b-[1px] border-primary outline-none mt-2.5"
 

@@ -118,7 +118,7 @@ export default function Login() {
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             onChangeText={onChange}
-                            value={value}
+                            value={value || ""}
                             className="w-full border-b-[1px] border-primary outline-none mt-2.5 text-base font-medium"
                             defaultValue=""
                         />
@@ -133,7 +133,7 @@ export default function Login() {
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             onChangeText={onChange}
-                            value={value}
+                            value={value || ""}
                             className="w-full border-b-[1px] border-primary text-homebg outline-none mt-2.5 text-base font-medium"
                             secureTextEntry={true}
                             defaultValue=""
