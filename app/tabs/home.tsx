@@ -3,8 +3,8 @@
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View, Modal, StyleSheet, LayoutChangeEvent } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useRouter } from "expo-router";
-import { useState, useRef } from "react";
+import { Stack, useRouter } from "expo-router";
+import { useState, useRef, useEffect } from "react";
 import usePost from "@/hooks/api/usePost";
 import { toast } from "sonner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -73,8 +73,19 @@ export default function Home() {
     const profileRef = useRef<TouchableOpacity | null>(null);
     const router = useRouter();
     const { token } = useAuth()
+    console.log(token)
 
     const postLogout = usePost("/api/v1/logout");
+    const {data: users, isPending, isSuccess} = usePost("api/v1/users-list")
+   
+    if(isPending){
+        toast.info("Loading...")
+    }
+    if(isSuccess){
+        toast.success("Data fetched successfully")
+    }
+
+  
     const friends: MessageItem[] = [
         {
             id: 1,
@@ -104,8 +115,11 @@ export default function Home() {
 
     const handleUserClick = (item: MessageItem): void => {
 
+        console.log(item)
+
     };
 
+    console.log(users)
     const openProfileModal = (): void => {
 
         profileRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
@@ -140,6 +154,7 @@ export default function Home() {
 
     return (
         <SafeAreaView className="bg-homebg flex-1">
+            <Stack.Screen name="header" options={{ headerShown: false }} />
             <View className="mt-10 mb-5 mx-6 flex flex-row items-center">
                 <View className="flex flex-row items-center flex-1 gap-x-1 relative">
                     <TextInput
@@ -183,6 +198,7 @@ export default function Home() {
                         }}>
                         <TouchableOpacity
                             onPress={() => {
+                                router.push("/screens/userprofile/userprofile")
                                 setVisible(false);
                             }}
                             className="py-2">

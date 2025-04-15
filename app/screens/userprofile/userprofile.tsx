@@ -51,10 +51,13 @@ export default function Userprofile() {
             toast.error("Something went wrong")
         }
     }
+    
     return (
         <SafeAreaView className="flex-1 bg-homebg">
             <Stack.Screen name="userprofile" options={{ headerShown: false }} />
-            <TouchableOpacity onPress={handleBack} className=" w-10 h-10">
+            <TouchableOpacity onPress={() => {
+                router.push("/tabs/home")
+            }} className=" w-10 h-10">
                 <View className="mt-3 mb-16 ml-6">
                     <Image source={require("../../../assets/images/Back.png")} className="w-full h-full object-contain" />
                 </View>

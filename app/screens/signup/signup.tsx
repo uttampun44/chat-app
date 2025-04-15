@@ -1,5 +1,5 @@
 import { Stack, useRouter } from "expo-router";
-import { Button, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Controller, useForm } from "react-hook-form"
 import signUpFormTypes from "@/types/signup";
@@ -8,8 +8,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 
 export default function Signup() {
-   
-   const [apiError, setApiError] = useState<string>("")
+
    const router = useRouter();
    const post = usePost("/api/v1/sign-up")
 
@@ -19,20 +18,26 @@ export default function Signup() {
       router.push("/screens/onboarding/onboarding")
    }
 
-   const onSubmit = (data: signUpFormTypes) => {
-      console.log(data)
-       try {
-            if(!data.password === !data.password_confirmation){
-               toast.info("Passwords do not match")
-               return
-            }
-            post.mutateAsync(data);
-           toast.success("Signup successfully")
-           router.push("/screens/login/login")
-       } catch (error) {
-          toast.error("Something went wrong")
-         
-       }
+   const onSubmit = async (data: signUpFormTypes) => {
+      try {
+         if (data.password !== data.password_confirmation) {
+            toast.info("Passwords do not match")
+            return
+         }
+         if (data.password.length >= 8) {
+            toast.info("Password must be at least 8 characters")
+            return
+         }
+         await post.mutateAsync({ data: data });
+         toast.success("Signup successfully")
+         router.push("/screens/login/login")
+      } catch (error: any) {
+         if (error.response.status === 422) {
+            toast.error(error.response.data.message)
+            return
+         }
+         toast.error("Something went wrong")
+      }
    }
 
    return (
@@ -54,7 +59,7 @@ export default function Signup() {
                   <TextInput
                      className="w-full border-b-[1px] border-primary outline-none mb-4 mt-2.5 text-base font-medium"
                      onChange={onChange}
-                     value={value}
+                     value={value || ""}
                      onBlur={onBlur}
                   />
                )}
@@ -66,9 +71,6 @@ export default function Signup() {
             {
                errors.name && <Text className="text-danger text-sm">Please Enter your name</Text>
             }
-            {
-               
-            }
             <Text className="text-secondary text-sm font-medium">Your Email</Text>
             <Controller
                control={control}
@@ -76,16 +78,15 @@ export default function Signup() {
                   <TextInput
                      className="w-full border-b-[1px] border-primary outline-none mb-4 mt-2.5 text-base font-medium"
                      onChange={onChange}
-                     value={value}
+                     value={value || ""}
                      onBlur={onBlur}
-                     secureTextEntry
                      focusable
+                     keyboardType="email-address"
                   />
                )}
                name="email"
                rules={{
                   required: true,
-                  pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                }}
             />
             {
@@ -98,35 +99,40 @@ export default function Signup() {
                   <TextInput
                      className="w-full border-b-[1px] border-primary outline-none mb-4 mt-2.5 text-base font-medium"
                      onChange={onChange}
-                     value={value}
+                     value={value || ""}
                      onBlur={onBlur}
-                     secureTextEntry
+                     secureTextEntry={true}
+                     textContentType="password"
+                     autoComplete="password"
                      focusable
                   />
                )}
-               name="password_confirmation"
+               name="password"
                rules={{
                   required: true,
-                  minLength: 6,
+                  minLength: 9
                }}
             />
             {
                errors.password_confirmation && <Text className="text-danger text-sm">Please Enter your password</Text>
             }
             <Text className="text-secondary text-sm font-medium mt-2.5">Confirm Password</Text>
-            <Controller
+            <Controller  
                control={control}
                render={({ field: { value, onChange } }) => (
                   <TextInput
                      className="w-full border-b-[1px] border-primary outline-none mt-2.5 text-base font-medium"
-                     value={value}
+                     value={value || ""}
                      onChange={onChange}
+                     secureTextEntry={true}
+                     textContentType="password"
+                     autoComplete="password"
                   />
                )}
-               name="password"
+               name="password_confirmation"
                rules={{
                   required: true,
-                  minLength: 6,
+                  minLength: 8
                }}
             />
             {
