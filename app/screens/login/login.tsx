@@ -26,15 +26,7 @@ export default function Login() {
 
     const { token, setToken } = useAuth()
 
-    console.log(token);
-
-    const post = usePost("/api/v1/login", {
-        headers: {
-            Authorization: `Bearer-${token}`
-        }
-    })
-
-    console.log(CONFIG.GOOGLE_WEB_CLIENT_ID)
+    const post = usePost("/api/v1/login")
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: CONFIG.GOOGLE_WEB_CLIENT_ID || "",
@@ -46,20 +38,28 @@ export default function Login() {
     const handleBack = () => {
         router.push("/screens/onboarding/onboarding")
     }
-
-    const onSubmit = (data: loginForm) => {
+  
+    const onSubmit = async(formData: loginForm) => {
+     
+        console.log(token, "and formData ", formData)
         try {
-            post.mutateAsync(data)
-            toast.success("Login Success")
-            const result = await AsyncStorage.getItem("token");
-            if (!result) return;
-            const token = JSON.parse(result);
-            setToken(token)
-            if (token.accessToken) {
-                router.push("/tabs/home")
-
-            }
+            const response = await post.mutateAsync({data:formData,  
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                  },
+            })
+           console.log(response.token)
+           if(response.token){
+               await AsyncStorage.setItem("token", response.token);
+               setToken(response.token)
+               toast.success("Login Success")
+               router.push("/tabs/home")
+           }
+            
         } catch (error) {
+            console.log(error)
             toast.error("Something went wrong")
         }
     }
@@ -69,6 +69,7 @@ export default function Login() {
     }
 
     const handleSubmitGoogle = async (item): Promise<void> => {
+        console.log(item)
          if(icons.find(iconsItem => iconsItem.id == item.id)){
             try {
                  await GoogleSignin.hasPlayServices();
@@ -80,10 +81,6 @@ export default function Login() {
             }
          }
     };
-
-
-
-    const useInfo = useFetch("https://api.chatbox.com/user", token)
 
     return (
         <SafeAreaView>
