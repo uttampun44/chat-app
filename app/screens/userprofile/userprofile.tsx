@@ -7,17 +7,16 @@ export default function Userprofile() {
 
     const { handleSubmit } = useForm()
 
-    const handleBack = () => {
-        router.push("/tabs/home")
-    }
-
     const onSubmit = (data: any) => {
         console.log(data)
     }
+    
     return (
         <SafeAreaView className="flex-1 bg-homebg">
             <Stack.Screen name="userprofile" options={{ headerShown: false }} />
-            <TouchableOpacity onPress={handleBack} className=" w-10 h-10">
+            <TouchableOpacity onPress={() => {
+                router.push("/tabs/home")
+            }} className=" w-10 h-10">
                 <View className="mt-3 mb-16 ml-6">
                     <Image source={require("../../../assets/images/Back.png")} className="w-full h-full object-contain" />
                 </View>
@@ -26,7 +25,7 @@ export default function Userprofile() {
                 <Text className="text-center text-primary text-xl font-bold mt-10 mb-5">Edit profile</Text>
             </View>
             <View>
-                 <Image source={require("../../../assets/images/profile.png")} className="w-40 h-40 mx-auto mb-10" />
+                <Image source={require("../../../assets/images/profile.png")} className="w-40 h-40 mx-auto mb-10" />
             </View>
             <View className="formField mx-5">
                 <View className="mb-1">
@@ -67,7 +66,7 @@ export default function Userprofile() {
                     />
                 </View>
                 <TouchableOpacity className="bg-primary rounded-md mt-8 mb-6 py-4 px-20" onPress={handleSubmit(onSubmit)}>
-                    <Text className="text-white text-center font-medium">Create an account</Text>
+                    <Text className="text-white text-center font-medium">Update account</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

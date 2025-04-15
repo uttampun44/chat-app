@@ -56,10 +56,8 @@ export default function Login() {
                toast.success("Login Success")
                router.push("/tabs/home")
            }
-            
         } catch (error) {
-            console.log(error)
-            toast.error("Something went wrong")
+            toast.error(error.response.data.message)
         }
     }
 
@@ -68,7 +66,7 @@ export default function Login() {
     }
 
     const handleSubmitGoogle = async (item): Promise<void> => {
-        console.log(item)
+      
          if(icons.find(iconsItem => iconsItem.id == item.id)){
             try {
                  await GoogleSignin.hasPlayServices();
@@ -114,9 +112,9 @@ export default function Login() {
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             onChangeText={onChange}
-                            value={value}
+                            value={value || ""}
                             className="w-full border-b-[1px] border-primary outline-none mt-2.5 text-base font-medium"
-                            defaultValue=""
+                           
                         />
                     )}
                     rules={{ required: true }}
@@ -129,10 +127,10 @@ export default function Login() {
                     render={({ field: { onChange, value } }) => (
                         <TextInput
                             onChangeText={onChange}
-                            value={value}
+                            value={value || ""}
                             className="w-full border-b-[1px] border-primary text-homebg outline-none mt-2.5 text-base font-medium"
                             secureTextEntry={true}
-                            defaultValue=""
+                          
                         />
                     )}
                     rules={{ required: true }}
