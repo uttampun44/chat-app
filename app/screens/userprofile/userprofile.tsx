@@ -1,14 +1,55 @@
 import { router, Stack } from "expo-router";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { userprofile } from "./types/userprofile";
+import DocumentPicker from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
+import { useState } from "react";
+import { toast } from "sonner";
+import usePost from "@/hooks/api/usePost";
+
 
 export default function Userprofile() {
 
-    const { handleSubmit } = useForm()
+    const [filename, setFilename] = useState<string | null>(null);
+    const { handleSubmit, control, setValue } = useForm<userprofile>()
 
-    const onSubmit = (data: any) => {
-        console.log(data)
+    const handleFile = async () => {
+        try {
+            const fileSize = await RNFS.stat(filename as string);
+            const maxSize = 2 * 1024 * 1024;
+            if (fileSize.size > maxSize) {
+                toast.error(`File size should be less than ${maxSize} MB `)
+                return
+            }
+            const res = await DocumentPicker.pickSingle({
+                type: [DocumentPicker.types.allFiles],
+            });
+            setFilename(res.name)
+            setValue("image", res.fileCopyUri as string)
+        } catch (error) {
+            if (DocumentPicker.isCancel(error)) {
+                toast.info("User cancelled")
+            } else {
+                toast.error("Something went wrong")
+            }
+        }
+    }
+
+
+    const handleBack = () => {
+        router.push("/tabs/home")
+    }
+
+    const postUserProfile = usePost("/api/v1/userprofile");
+    const onSubmit = async (data: userprofile) => {
+        try {
+            await postUserProfile.mutateAsync({ data: data })
+            toast.success("Profile updated successfully")
+        } catch (error) {
+            toast.error("Something went wrong")
+        }
     }
     
     return (
@@ -30,40 +71,64 @@ export default function Userprofile() {
             <View className="formField mx-5">
                 <View className="mb-1">
                     <Text className="text-primary text-sm font-normal">Name</Text>
-                    <TextInput
-                        placeholder="Enter your name"
-                        value="Uttam"
-                        defaultValue="Uttam"
-                        className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                    <Controller
+                        control={control}
+                        name="name"
+                        render={({ field: { onChange, value } }) => (
+                            <TextInput
+                                placeholder="Enter your name"
+                                onChangeText={onChange}
+                                value={value || ""}
+                                className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                            />
+                        )}
+                        rules={{ required: true }}
                     />
                 </View>
-                <View className="mb-1">
-                    <Text className="text-primary text-sm font-normal">Email</Text>
-                    <TextInput
-                        placeholder="Enter your email"
-                        value="email@gmail.com"
-                        defaultValue="email@gmail.com"
-                        className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
-                    />
-                </View>
+
                 <View className="mb-1">
                     <Text className="text-primary text-sm font-normal">Phone Number</Text>
-                    <TextInput
-                        placeholder="Enter your phone number"
-                        value="9876543210"
-                        defaultValue="9876543210"
-                        className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                    <Controller
+                        control={control}
+                        name="phone"
+                        render={({ field: { onChange, value } }) => (
+                            <TextInput
+                                placeholder="Enter your phone number"
+                                onChangeText={onChange}
+                                value={value || ""}
+                                className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                            />
+                        )}
+                        rules={{ required: true }}
                     />
                 </View>
                 <View className="mb-1">
                     <Text className="text-primary text-sm font-normal">Date of Birth</Text>
-                    <TextInput
-                        keyboardType="numeric"
-                        placeholder="Enter your date of birth"
-                        value="123456789"
-                        defaultValue="123456789"
-                        className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                    <Controller
+                        control={control}
+                        name="date"
+                        render={({ field: { onChange, value } }) => (
+                            <TextInput
+                                placeholder="Enter your date of birth"
+                                onChangeText={onChange}
+                                value={value || ""}
+                                className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                            />
+                        )}
+                        rules={{ required: true }}
                     />
+                </View>
+                <View className="mb-1">
+                    <Text className="text-primary text-sm font-normal">Profile Picture</Text>
+                    <TouchableOpacity
+                        onPress={handleFile}
+                        className="w-full border border-primary rounded-md p-3 mb-4 mt-2.5 bg-white"
+                    >
+                        <Text className="text-primary">
+                            {filename || "Tap to upload image"}
+                        </Text>
+                    </TouchableOpacity>
+
                 </View>
                 <TouchableOpacity className="bg-primary rounded-md mt-8 mb-6 py-4 px-20" onPress={handleSubmit(onSubmit)}>
                     <Text className="text-white text-center font-medium">Update account</Text>

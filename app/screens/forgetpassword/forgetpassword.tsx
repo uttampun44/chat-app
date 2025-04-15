@@ -7,7 +7,7 @@ interface forgetPasswordFields {
     email: string
 }
 
-export default function forgetPassword() {
+export default function ForgetPassword() {
 
     const router = useRouter()
     const { control, formState: { errors }, handleSubmit } = useForm<forgetPasswordFields>()

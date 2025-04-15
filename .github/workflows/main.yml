@@ -8,14 +8,23 @@ on:
 jobs:
     build:
      runs-on: ubuntu-latest
-     steps:
-      - name: Setup node js
-        uses: actions/setup-node@v3
-        with: 
-        node-version: "22.0"
 
-      - name: Install dependencies
-        run:  npm install
+     steps:
+       # Setup Git configuration
+      - name: Setup git
+        run: |
+          git config --global user.name 'uttampun'
+          git config --global user.email 'uttampun50@gmail.com'
+    
+      - name: Checkout repository
+        uses: actions/checkout@v4
         
-      - name: Build
-        run:  npm run build
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      # Install bun
+        with:
+          bun-version: latest
+       
+          # Install dependencies
+      - run: bun install

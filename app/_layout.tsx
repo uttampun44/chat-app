@@ -10,7 +10,7 @@ export default function RootLayout() {
    return (
       <QueryClientProvider client={queryClient}>
          <Context >
-            <Toaster />
+            <Toaster richColors />
             <Stack />
          </Context>
       </QueryClientProvider>
