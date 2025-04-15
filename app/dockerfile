@@ -1,0 +1,20 @@
+#instal depedencies
+FROM oven/bun:latest
+
+# working directory
+WORKDIR /app
+
+# copy env
+COPY .env ./
+
+# copy package.json and package-lock.json
+COPY  package.json package-lock.json ./
+
+# bun setup
+RUN bun install
+
+# copy source code
+COPY . .
+
+# start app
+CMD ["bun", "run", "start"]
