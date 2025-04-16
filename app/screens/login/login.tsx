@@ -24,8 +24,9 @@ export default function Login() {
         return item !== socialIcon[index]
     })
 
-    const { token, setToken } = useAuth()
+    const { user, token, setToken, setUser } = useAuth()
 
+    console.log(user)
     const post = usePost("/api/v1/login")
 
     const [request, response, promptAsync] = Google.useAuthRequest({
@@ -38,24 +39,29 @@ export default function Login() {
     const handleBack = () => {
         router.push("/screens/onboarding/onboarding")
     }
-  
-    const onSubmit = async(formData: loginForm) => {
-     
+
+    const onSubmit = async (formData: loginForm) => {
+
         try {
-            const response = await post.mutateAsync({data:formData,  
+            const response = await post.mutateAsync({
+                data: formData,
                 headers: {
                     'Content-Type': 'application/json',
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`,
-                  },
+                },
             })
-        
-           if(response.token){
-               await AsyncStorage.setItem("token", response.token);
-               setToken(response.token)
-               toast.success("Login Success")
-               router.push("/tabs/home")
-           }
+
+
+            if (response.token) {
+                await AsyncStorage.setItem("token", response.token);
+                await AsyncStorage.setItem("user", response.user_id);
+
+                setToken(response.token)
+                setUser(response.user_id)
+                toast.success("Login Success")
+                router.push("/tabs/home")
+            }
         } catch (error) {
             toast.error(error.response.data.message)
         }
@@ -66,17 +72,17 @@ export default function Login() {
     }
 
     const handleSubmitGoogle = async (item): Promise<void> => {
-      
-         if(icons.find(iconsItem => iconsItem.id == item.id)){
+
+        if (icons.find(iconsItem => iconsItem.id == item.id)) {
             try {
-                 await GoogleSignin.hasPlayServices();
-                 const response = await GoogleSignin.signIn()
-                 console.log(response)
-                 toast.success("Successfully Authentication With Google")
+                await GoogleSignin.hasPlayServices();
+                const response = await GoogleSignin.signIn()
+                console.log(response)
+                toast.success("Successfully Authentication With Google")
             } catch (error) {
-                 toast.error("Couldn't log in")
+                toast.error("Couldn't log in")
             }
-         }
+        }
     };
 
     return (
@@ -114,7 +120,7 @@ export default function Login() {
                             onChangeText={onChange}
                             value={value || ""}
                             className="w-full border-b-[1px] border-primary outline-none mt-2.5 text-base font-medium"
-                           
+
                         />
                     )}
                     rules={{ required: true }}
@@ -130,7 +136,7 @@ export default function Login() {
                             value={value || ""}
                             className="w-full border-b-[1px] border-primary text-homebg outline-none mt-2.5 text-base font-medium"
                             secureTextEntry={true}
-                          
+
                         />
                     )}
                     rules={{ required: true }}

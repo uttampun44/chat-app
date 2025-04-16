@@ -25,17 +25,21 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const fetchToken = async () => {
         const token = await AsyncStorage.getItem("token");
-        if (token) {
+        const user = await AsyncStorage.getItem("user");
+
+        if (token && user) {
             setToken(token);
+            setUser(user);
         }
     };
 
     useEffect(() => {
         fetchToken()
-        if (token) {
+        if (token && user) {
             AsyncStorage.setItem("token", token);
+            AsyncStorage.setItem("user", user);
         }
-    }, [token]);
+    }, [token, user]);
 
 
     return (

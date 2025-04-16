@@ -76,17 +76,11 @@ export default function Home() {
     const { token } = useAuth()
     
     const postLogout = usePost("/api/v1/logout");
-    const {data: users, isPending, isSuccess} = useFetch("api/v1/users-list", {
+    const {data: users} = useFetch("api/v1/users-list", {
         'Authorization': `Bearer ${token}`
     })
    
-    if(!users || isPending){
-        toast.info("Loading...")
-    }
-    if(isSuccess){
-        toast.success("Data fetched successfully")
-    }
-
+    console.log(users)
   
     const friends: MessageItem[] = [
         {
@@ -148,6 +142,7 @@ export default function Home() {
 
         } finally {
             await AsyncStorage.removeItem('token');
+            await AsyncStorage.removeItem('user');
             setVisible(false);
             router.push("/screens/login/login");
             toast.success("Logged out successfully");

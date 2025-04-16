@@ -15,6 +15,7 @@ export default function useFetch<T = any>(url: string, customHeaders:Record<stri
     const { isPending, isSuccess, isError, data } = useQuery<T>({
         queryKey: ["fetchData", url, customHeaders],
         queryFn: fetchData,
+    
     })
     
     return { data, isError, isPending, isSuccess };

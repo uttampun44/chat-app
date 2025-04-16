@@ -8,12 +8,15 @@ import * as RNFS from 'react-native-fs';
 import { useState } from "react";
 import { toast } from "sonner";
 import usePost from "@/hooks/api/usePost";
+import { useAuth } from "@/hooks/auth/useAuth";
 
 
 export default function Userprofile() {
 
     const [filename, setFilename] = useState<string | null>(null);
     const { handleSubmit, control, setValue } = useForm<userprofile>()
+
+    const {user} = useAuth();
 
     const handleFile = async () => {
         // try {
@@ -68,6 +71,16 @@ export default function Userprofile() {
             <View>
                 <Image source={require("../../../assets/images/profile.png")} className="w-40 h-40 mx-auto mb-10" />
             </View>
+             <Controller
+                control={control}
+                  name="user_id"
+                 render={({field: {value}}) => (
+                    <TextInput
+                     className="hidden"
+                      value={user}
+                     />
+                 )}
+               />
             <View className="formField mx-5">
                 <View className="mb-1">
                     <Text className="text-primary text-sm font-normal">Name</Text>
