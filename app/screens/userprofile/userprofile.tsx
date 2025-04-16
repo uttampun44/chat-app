@@ -3,8 +3,8 @@ import { Controller, useForm } from "react-hook-form";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { userprofile } from "./types/userprofile";
-import DocumentPicker from 'react-native-document-picker';
-import RNFS from 'react-native-fs';
+import * as DocumentPicker from 'react-native-document-picker';
+import * as RNFS from 'react-native-fs';
 import { useState } from "react";
 import { toast } from "sonner";
 import usePost from "@/hooks/api/usePost";
@@ -16,25 +16,25 @@ export default function Userprofile() {
     const { handleSubmit, control, setValue } = useForm<userprofile>()
 
     const handleFile = async () => {
-        try {
-            const fileSize = await RNFS.stat(filename as string);
-            const maxSize = 2 * 1024 * 1024;
-            if (fileSize.size > maxSize) {
-                toast.error(`File size should be less than ${maxSize} MB `)
-                return
-            }
-            const res = await DocumentPicker.pickSingle({
-                type: [DocumentPicker.types.allFiles],
-            });
-            setFilename(res.name)
-            setValue("image", res.fileCopyUri as string)
-        } catch (error) {
-            if (DocumentPicker.isCancel(error)) {
-                toast.info("User cancelled")
-            } else {
-                toast.error("Something went wrong")
-            }
-        }
+        // try {
+        //     const fileSize = await RNFS.stat(filename as string);
+        //     const maxSize = 2 * 1024 * 1024;
+        //     if (fileSize.size > maxSize) {
+        //         toast.error(`File size should be less than ${maxSize} MB `)
+        //         return
+        //     }
+        //     const res = await DocumentPicker.pickSingle({
+        //         type: [DocumentPicker.types.allFiles],
+        //     });
+        //     setFilename(res.name)
+        //     setValue("image", res.fileCopyUri as string)
+        // } catch (error) {
+        //     if (DocumentPicker.isCancel(error)) {
+        //         toast.info("User cancelled")
+        //     } else {
+        //         toast.error("Something went wrong")
+        //     }
+        // }
     }
 
 

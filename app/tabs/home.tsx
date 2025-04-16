@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useAuth } from "@/hooks/auth/useAuth";
+import useFetch from "@/hooks/api/useFetch";
 
 
 const Tab = createBottomTabNavigator();
@@ -73,12 +74,13 @@ export default function Home() {
     const profileRef = useRef<TouchableOpacity | null>(null);
     const router = useRouter();
     const { token } = useAuth()
-    console.log(token)
-
+    
     const postLogout = usePost("/api/v1/logout");
-    const {data: users, isPending, isSuccess} = usePost("api/v1/users-list")
+    const {data: users, isPending, isSuccess} = useFetch("api/v1/users-list", {
+        'Authorization': `Bearer ${token}`
+    })
    
-    if(isPending){
+    if(!users || isPending){
         toast.info("Loading...")
     }
     if(isSuccess){
@@ -119,7 +121,7 @@ export default function Home() {
 
     };
 
-    console.log(users)
+    
     const openProfileModal = (): void => {
 
         profileRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
