@@ -74,40 +74,11 @@ export default function Home() {
     const profileRef = useRef<TouchableOpacity | null>(null);
     const router = useRouter();
     const { token } = useAuth()
-    
+
     const postLogout = usePost("/api/v1/logout");
-    const {data: users} = useFetch("api/v1/users-list", {
+    const { data: users } = useFetch("api/v1/user-information", {
         'Authorization': `Bearer ${token}`
     })
-   
-    console.log(users)
-  
-    const friends: MessageItem[] = [
-        {
-            id: 1,
-            name: "Adil",
-            image: require("../../assets/images/friendOne.png"),
-            message: "Hi ! there"
-        },
-        {
-            id: 2,
-            name: "Marina",
-            image: require("../../assets/images/friendTwo.png"),
-            message: "Hi ! there"
-        },
-        {
-            id: 3,
-            name: "Dean",
-            image: require("../../assets/images/friendThree.png"),
-            message: "Hi ! there"
-        },
-        {
-            id: 4,
-            name: "John Doe",
-            image: require("../../assets/images/friendFour.png"),
-            message: "Hi ! there"
-        },
-    ];
 
     const handleUserClick = (item: MessageItem): void => {
 
@@ -115,7 +86,7 @@ export default function Home() {
 
     };
 
-    
+
     const openProfileModal = (): void => {
 
         profileRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
@@ -213,14 +184,24 @@ export default function Home() {
             <Text className="text-white text-xl font-medium ml-6">Friends</Text>
             <View className="my-5 mx-6">
                 <FlatList
-                    data={friends}
+                    data={users}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View className="flex flex-col items-center">
-                            <Image source={item.image} />
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item }) => {
+                        const imageUrl = item.user_information?.image;
+
+                        const imageSource = imageUrl
+                            ? { uri: imageUrl.startsWith('http') ? imageUrl : `http://127.0.0.1:8000/storage/${imageUrl}` }
+                            : require('../../assets/images/friendTwo.png');
+                        return (<View className="flex flex-col items-center p-2">
+                            <Image
+                                source={imageSource}
+                                style={{ width: 50, height: 50, borderRadius: 25 }}
+                            />
                             <Text className="text-white text-xl font-medium ml-2">{item.name}</Text>
                         </View>
-                    )}
+                        )
+                    }}
                     numColumns={4}
                     columnWrapperStyle={{ columnGap: 16, justifyContent: "space-between", alignItems: "center" }}
                 />
