@@ -170,7 +170,7 @@ export default function Home() {
                                 setVisible(false);
                             }}
                             className="py-2">
-                            <Text className="text-black text-base font-medium">Profile</Text>
+                            <Text className="text-black text-base font-medium">Profile Update</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={handleLogout}

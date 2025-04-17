@@ -45,7 +45,7 @@ export default function Userprofile() {
         router.push("/tabs/home")
     }
 
-    const postUserProfile = usePost("/api/v1/userprofile");
+    const postUserProfile = usePost("/api/v1/update-user-information");
     const onSubmit = async (data: userprofile) => {
         try {
             await postUserProfile.mutateAsync({ data: data })
