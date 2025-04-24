@@ -1,18 +1,24 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import Context from "@/context/context";
-import { NavigationContainer } from "@react-navigation/native";
-import { Toaster } from "sonner";
+import { Toaster } from "sonner-native";
+import 'react-native-reanimated';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StatusBar } from "react-native";
 
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
    return (
-      <QueryClientProvider client={queryClient}>
-         <Context >
-            <Toaster richColors />
-            <Stack />
-         </Context>
-      </QueryClientProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+             <StatusBar barStyle="light-content" />
+            <QueryClientProvider client={queryClient}>
+               <Context >
+                  <Toaster richColors />
+                  <Stack />
+               </Context>
+            </QueryClientProvider>
+      </GestureHandlerRootView>
+      
    );
 }

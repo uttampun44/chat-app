@@ -3,7 +3,6 @@ import React from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import  socialIcon  from "@/utils/onboarding";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Google from "expo-auth-session/providers/google";
 import { CONFIG } from "../../config";
 
@@ -26,35 +25,12 @@ export default function OnBoarding() {
 
       const [request, response, promptAsync] = Google.useAuthRequest({
             webClientId: CONFIG.GOOGLE_WEB_CLIENT_ID || "",
+            androidClientId: CONFIG.GOOGLE_ANDROID_CLIENT_ID || "",
         })
     
-        const handleGoogleSignIn = async (): Promise<void> => {
-            try {
-                if (icons.find(iconsItem => iconsItem.id === 2)) {
-                    await GoogleSignin.hasPlayServices();
-                    console.log("here")
-                    const response = await GoogleSignin.signIn();
-                    console.log("google response", response);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
+       
         
-    const handleSubmitSocial = async (item: any): Promise<void> => {
-        try {
-            switch(item.id){
-                case 2:
-                    await handleGoogleSignIn()
-                    break;
-                default:
-                    console.log('Social login not implemented');
-            }
-           
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  
 
     return (
         <SafeAreaView className="bg-[#1A1A1A] h-screen">
@@ -71,7 +47,7 @@ export default function OnBoarding() {
                 <FlatList
                     data={icons}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => <TouchableOpacity onPress={() => handleSubmitSocial(item)}>
+                    renderItem={({ item }) => <TouchableOpacity >
                     <Image source={item.source} testID="social-icon" />
                     </TouchableOpacity>}
                     className="social-icons *:flex-row"

@@ -1,7 +1,7 @@
 export interface userprofile {
-    user_id: number,
-    name: string;
     phone: string;
-    date: string;
+    gender:string;
+    date_of_birth: string;
+    address:string,
     image: string;
 }

@@ -13,7 +13,7 @@ interface AuthProviderProps {
 }
 
 export const AuthContext = createContext<AuthValue>({
-    user: "",
+    user: '',
     token: "",
     setToken: () => { },
     setUser: () => { }

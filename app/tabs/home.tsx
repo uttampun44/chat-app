@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Stack, useRouter } from "expo-router";
 import { useState, useRef, useEffect } from "react";
 import usePost from "@/hooks/api/usePost";
-import { toast } from "sonner";
+import { toast } from "sonner-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useAuth } from "@/hooks/auth/useAuth";
@@ -187,6 +187,7 @@ export default function Home() {
                     data={users}
                     keyExtractor={(item) => item.id.toString()}
                     showsHorizontalScrollIndicator={false}
+                    horizontal={true}
                     renderItem={({ item }) => {
                         const imageUrl = item.user_information?.image;
 
@@ -202,8 +203,7 @@ export default function Home() {
                         </View>
                         )
                     }}
-                    numColumns={4}
-                    columnWrapperStyle={{ columnGap: 16, justifyContent: "space-between", alignItems: "center" }}
+                   
                 />
             </View>
 

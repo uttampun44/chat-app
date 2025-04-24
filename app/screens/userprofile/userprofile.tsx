@@ -6,7 +6,7 @@ import { userprofile } from "./types/userprofile";
 import * as DocumentPicker from 'react-native-document-picker';
 import * as RNFS from 'react-native-fs';
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "sonner-native";
 import usePost from "@/hooks/api/usePost";
 import { useAuth } from "@/hooks/auth/useAuth";
 
@@ -16,7 +16,9 @@ export default function Userprofile() {
     const [filename, setFilename] = useState<string | null>(null);
     const { handleSubmit, control, setValue } = useForm<userprofile>()
 
-    const {user} = useAuth();
+    const { user } = useAuth();
+
+    console.log(user)
 
     const handleFile = async () => {
         // try {
@@ -47,14 +49,20 @@ export default function Userprofile() {
 
     const postUserProfile = usePost("/api/v1/update-user-information");
     const onSubmit = async (data: userprofile) => {
+
+        const dataToSend = {
+            user_id: user,
+            ...data
+        }
+
         try {
-            await postUserProfile.mutateAsync({ data: data })
+            await postUserProfile.mutateAsync({ data: dataToSend })
             toast.success("Profile updated successfully")
         } catch (error) {
             toast.error("Something went wrong")
         }
     }
-    
+
     return (
         <SafeAreaView className="flex-1 bg-homebg">
             <Stack.Screen name="userprofile" options={{ headerShown: false }} />
@@ -71,33 +79,9 @@ export default function Userprofile() {
             <View>
                 <Image source={require("../../../assets/images/profile.png")} className="w-40 h-40 mx-auto mb-10" />
             </View>
-             <Controller
-                control={control}
-                  name="user_id"
-                 render={({field: {value}}) => (
-                    <TextInput
-                     className="hidden"
-                      value={user}
-                     />
-                 )}
-               />
+
             <View className="formField mx-5">
-                <View className="mb-1">
-                    <Text className="text-primary text-sm font-normal">Name</Text>
-                    <Controller
-                        control={control}
-                        name="name"
-                        render={({ field: { onChange, value } }) => (
-                            <TextInput
-                                placeholder="Enter your name"
-                                onChangeText={onChange}
-                                value={value || ""}
-                                className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
-                            />
-                        )}
-                        rules={{ required: true }}
-                    />
-                </View>
+              
 
                 <View className="mb-1">
                     <Text className="text-primary text-sm font-normal">Phone Number</Text>
@@ -116,13 +100,46 @@ export default function Userprofile() {
                     />
                 </View>
                 <View className="mb-1">
+                    <Text className="text-primary text-sm font-normal">Gender</Text>
+                    <Controller
+                        control={control}
+                        name="gender"
+                        render={({ field: { onChange, value } }) => (
+                            <TextInput
+                                placeholder="Enter your gender"
+                                onChangeText={onChange}
+                                value={value || ""}
+                                className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                            />
+                        )}
+                        rules={{ required: true }}
+                    />
+                </View>
+                <View className="mb-1">
                     <Text className="text-primary text-sm font-normal">Date of Birth</Text>
                     <Controller
                         control={control}
-                        name="date"
+                        name="date_of_birth"
                         render={({ field: { onChange, value } }) => (
                             <TextInput
                                 placeholder="Enter your date of birth"
+                                onChangeText={onChange}
+                                value={value || ""}
+                                className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"
+                            />
+                        )}
+                        rules={{ required: true }}
+                    />
+                </View>
+
+                <View className="mb-1">
+                    <Text className="text-primary text-sm font-normal">Address</Text>
+                    <Controller
+                        control={control}
+                        name="address"
+                        render={({ field: { onChange, value } }) => (
+                            <TextInput
+                                placeholder="Enter your address"
                                 onChangeText={onChange}
                                 value={value || ""}
                                 className="w-full border-b-[1px] border-primary text-primary outline-none mb-4 mt-2.5 text-base font-medium"

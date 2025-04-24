@@ -1,6 +1,6 @@
 // @ts-nocheck
 import socialIcon from "@/utils/onboarding";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useNavigation, useRouter } from "expo-router";
 import { Controller } from "react-hook-form";
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,8 +13,8 @@ import useFetch from "@/hooks/api/useFetch";
 import { CONFIG } from "../../config";
 import { useAuth } from "@/hooks/auth/useAuth";
 import usePost from "@/hooks/api/usePost";
-import { toast } from "sonner";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { toast } from "sonner-native";
+
 
 export default function Login() {
 
@@ -26,15 +26,15 @@ export default function Login() {
 
     const { user, token, setToken, setUser } = useAuth()
 
-    console.log(user)
     const post = usePost("/api/v1/login")
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: CONFIG.GOOGLE_WEB_CLIENT_ID || "",
+        androidClientId: CONFIG.GOOGLE_ANDROID_CLIENT_ID || "",
     })
 
     const { control, formState: { errors }, handleSubmit } = useForm<loginForm>();
-    const router = useRouter();
+    const router = useNavigation();
 
     const handleBack = () => {
         router.push("/screens/onboarding/onboarding")
@@ -46,21 +46,24 @@ export default function Login() {
             const response = await post.mutateAsync({
                 data: formData,
                 headers: {
-                    'Content-Type': 'application/json',
                     "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}`,
                 },
             })
 
+            console.log(response)
 
             if (response.token) {
                 await AsyncStorage.setItem("token", response.token);
-                await AsyncStorage.setItem("user", response.user_id);
+                await AsyncStorage.setItem("user", response.user_id.toString());
 
                 setToken(response.token)
                 setUser(response.user_id)
                 toast.success("Login Success")
-                router.push("/tabs/home")
+                console.log("Before navigation...");
+                router.replace("/tabs/home");
+                console.log("After navigation...");
+                
             }
         } catch (error) {
             toast.error(error.response.data.message)
@@ -71,19 +74,7 @@ export default function Login() {
         router.push("/screens/forgetpassword/forgetpassword")
     }
 
-    const handleSubmitGoogle = async (item): Promise<void> => {
 
-        if (icons.find(iconsItem => iconsItem.id == item.id)) {
-            try {
-                await GoogleSignin.hasPlayServices();
-                const response = await GoogleSignin.signIn()
-                console.log(response)
-                toast.success("Successfully Authentication With Google")
-            } catch (error) {
-                toast.error("Couldn't log in")
-            }
-        }
-    };
 
     return (
         <SafeAreaView>

@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Controller, useForm } from "react-hook-form"
 import signUpFormTypes from "@/types/signup";
 import usePost from "@/hooks/api/usePost";
-import { toast } from "sonner";
+import { toast } from "sonner-native";
 import { useState } from "react";
 
 export default function Signup() {
